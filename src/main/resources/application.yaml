@@ -1,0 +1,16 @@
+spring:
+  main:
+    banner-mode: off
+    log-startup-info: false
+
+  profiles:
+    active: dev
+#
+eureka:
+  client:
+    enabled: false
+
+server:
+  port: 27800
+  servlet:
+    context-path: /fundi/api
