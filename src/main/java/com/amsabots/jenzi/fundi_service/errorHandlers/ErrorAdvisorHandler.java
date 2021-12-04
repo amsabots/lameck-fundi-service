@@ -20,31 +20,36 @@ public class ErrorAdvisorHandler {
 
     @ExceptionHandler({CustomBadRequest.class, HttpMessageNotReadableException.class})
     public ResponseEntity<ErrorEntity> handleBadRequest(Exception ex) {
-        return ResponseEntity.ok(new ErrorEntity(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), "ERRBADREQUEST"));
+        return ResponseEntity.badRequest().body(new ErrorEntity(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), "ERRBADREQUEST"));
     }
 
     @ExceptionHandler(CustomInternalServerError.class)
     public ResponseEntity<ErrorEntity> handleInterServerError(Exception ex) {
-        return ResponseEntity.ok(new ErrorEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "SERVERERR"));
+        return ResponseEntity.internalServerError().body(new ErrorEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), "SERVERERR"));
     }
 
     @ExceptionHandler(CustomResourceNotFound.class)
     public ResponseEntity<ErrorEntity> handleResourceNotFound(Exception ex) {
-        return ResponseEntity.ok(new ErrorEntity(ex.getMessage(), HttpStatus.NOT_FOUND.value(), "NOT_FOUND"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorEntity(ex.getMessage(), HttpStatus.NOT_FOUND.value(), "NOT_FOUND"));
     }
 
     @ExceptionHandler({RollbackException.class,
             EmptyResultDataAccessException.class, DataIntegrityViolationException.class})
     public ResponseEntity<ErrorEntity> handleJpaSqlException(Exception ex) {
         if (ex.getMessage().contains("exists"))
-            return ResponseEntity.ok(new ErrorEntity("Resource with the id provided cannot be found.",
-                    HttpStatus.NOT_FOUND.value(), "SQL_EXCEPTION"));
-        return ResponseEntity.ok(new ErrorEntity(ex.getMessage(),
+            return ResponseEntity.unprocessableEntity().body(new ErrorEntity("Resource with the id provided cannot be found.",
+                    HttpStatus.UNPROCESSABLE_ENTITY.value(), "SQL_EXCEPTION"));
+        return ResponseEntity.unprocessableEntity().body(new ErrorEntity(ex.getMessage(),
                 HttpStatus.UNPROCESSABLE_ENTITY.value(), "SQL_EXCEPTION"));
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ErrorEntity> handleMissingParameters(Exception ex) {
-        return ResponseEntity.ok(new ErrorEntity(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), "BAD_REQUEST"));
+        return ResponseEntity.badRequest().body(new ErrorEntity(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), "BAD_REQUEST"));
+    }
+
+    @ExceptionHandler(CustomForbiddenResource.class)
+    public ResponseEntity<ErrorEntity> handleForbiddenResource(Exception ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorEntity(ex.getMessage(), HttpStatus.FORBIDDEN.value(), "ERRBADREQUEST"));
     }
 }

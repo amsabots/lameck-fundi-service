@@ -9,7 +9,10 @@ import java.util.Optional;
  * @author andrew mititi on Date 12/2/21
  * @Project lameck-fundi-service
  */
+
 public interface AccountRepo extends JpaRepository<Account, Long> {
 
     public Optional<Account> findAccountByAccountId(String id);
+
+    public Optional<Account> findAccountByEmail(String emailOrPhoneNumber);
 }

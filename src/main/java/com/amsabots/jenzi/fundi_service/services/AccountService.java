@@ -37,4 +37,8 @@ public class AccountService {
         return accountRepo.findAccountByAccountId(id)
                 .orElseThrow(() -> new CustomResourceNotFound("Provided id does not correlate with any of our records"));
     }
+
+    public Account getAccountByEmail(String email){
+        return accountRepo.findAccountByEmail(email).orElse(null);
+    }
 }

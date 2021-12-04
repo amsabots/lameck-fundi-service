@@ -5,5 +5,7 @@ package com.amsabots.jenzi.fundi_service.enumUtils;
  * @Project lameck-fundi-service
  */
 public enum AccountProviders {
-    EMAILPASSWORD, PHONENUMBER, GOOGLE
+    EMAILPASSWORD, PHONENUMBER, GOOGLE;
+
+
 }

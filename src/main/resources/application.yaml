@@ -5,6 +5,8 @@ spring:
 
   profiles:
     active: dev
+  application:
+    name: fundi-service
 #
 eureka:
   client:
