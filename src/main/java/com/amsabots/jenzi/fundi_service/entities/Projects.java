@@ -2,11 +2,13 @@ package com.amsabots.jenzi.fundi_service.entities;
 
 import com.amsabots.jenzi.fundi_service.enumUtils.ProjectStatus;
 import com.amsabots.jenzi.fundi_service.utils.Commons;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -18,7 +20,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-public class Projects {
+public class Projects extends AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +38,10 @@ public class Projects {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accountId")
     private Account account;
+
+    @OneToMany(mappedBy = "projects", targetEntity = RatesAndReviews.class)
+    @JsonBackReference
+    private List<RatesAndReviews> ratesAndReviews;
 
     @PrePersist
     public void setCreationDefaults() {

@@ -2,6 +2,7 @@ package com.amsabots.jenzi.fundi_service.entities;
 
 import com.amsabots.jenzi.fundi_service.enumUtils.AccountProviders;
 import com.amsabots.jenzi.fundi_service.utils.Commons;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
@@ -47,6 +48,10 @@ public class Account extends AbstractEntity {
 
     @OneToMany(mappedBy = "account")
     private List<Projects> projects;
+
+    @OneToMany(mappedBy = "account", targetEntity = RatesAndReviews.class)
+    @JsonBackReference
+    private List<RatesAndReviews> ratesAndReviews;
 
     @PrePersist
     public void setUserDefaults() {
