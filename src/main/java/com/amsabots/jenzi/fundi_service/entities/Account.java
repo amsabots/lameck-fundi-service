@@ -2,11 +2,15 @@ package com.amsabots.jenzi.fundi_service.entities;
 
 import com.amsabots.jenzi.fundi_service.enumUtils.AccountProviders;
 import com.amsabots.jenzi.fundi_service.utils.Commons;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerator;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -18,6 +22,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Account extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +42,11 @@ public class Account extends AbstractEntity {
     private String userBackgroundColor;
     private String userForeGroundColor;
     private String accountId;
+    private boolean isPremium = false;
+    private String photoUrl;
+
+    @OneToMany(mappedBy = "account")
+    private List<Projects> projects;
 
     @PrePersist
     public void setUserDefaults() {
