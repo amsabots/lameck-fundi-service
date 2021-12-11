@@ -19,7 +19,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Projects extends AbstractEntity {
 
     @Id
@@ -40,7 +40,6 @@ public class Projects extends AbstractEntity {
     private Account account;
 
     @OneToMany(mappedBy = "projects", targetEntity = RatesAndReviews.class)
-    @JsonBackReference
     private List<RatesAndReviews> ratesAndReviews;
 
     @PrePersist

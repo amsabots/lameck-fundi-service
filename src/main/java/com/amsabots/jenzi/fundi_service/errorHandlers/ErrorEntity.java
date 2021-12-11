@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
  * @author andrew mititi on Date 12/2/21
  * @Project lameck-fundi-service
  */
-@AllArgsConstructor
 @NoArgsConstructor
 @Data
 @ToString
@@ -19,6 +18,7 @@ public class ErrorEntity {
     private String message;
     private int statusCode;
     private String errorCode;
+    //private LocalDateTime time = LocalDateTime.now();
 
     public ErrorEntity(String message, int statusCode, String errorCode) {
         this.message = message;
@@ -26,5 +26,5 @@ public class ErrorEntity {
         this.errorCode = errorCode;
     }
 
-    private LocalDateTime time = LocalDateTime.now();
+
 }

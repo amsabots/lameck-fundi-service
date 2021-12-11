@@ -6,9 +6,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerator;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -22,8 +20,8 @@ import java.util.UUID;
 @Table(name = "fundi_details")
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+@Getter
+@Setter
 public class Account extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +48,6 @@ public class Account extends AbstractEntity {
     private List<Projects> projects;
 
     @OneToMany(mappedBy = "account", targetEntity = RatesAndReviews.class)
-    @JsonBackReference
     private List<RatesAndReviews> ratesAndReviews;
 
     @PrePersist

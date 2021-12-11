@@ -11,7 +11,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.netty.http.server.HttpServer;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,21 +21,30 @@ import java.util.Optional;
 @RequestMapping("/rates-review")
 public class ReviewsController {
 
+    /*
+     * This endpoint should be used to test if its the root url can be reached in the first place before running
+     * data handlers APIS
+     * */
+
     @Autowired
     private RatesAndReviewService service;
+
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseObject<RatesAndReviews>> getAllProjects(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> pageSize
             , @RequestParam Optional<Long> accountId) {
-        int current_page = page.orElse(0);
+
+         int current_page = page.orElse(0);
         int page_size = pageSize.orElse(20);
-        long id = accountId.orElseThrow(() -> new CustomBadRequest("Request parameter of type accountId is required to map th request to respective account id"));
+        long id = accountId.orElseThrow(()->
+                new CustomBadRequest("Request parameter of type accountId is required to map th request to respective account id")
+        );
         List<RatesAndReviews> rates = service.getAccountRates(id, PageRequest.of(current_page, page_size));
         return ResponseEntity.ok().body(new ResponseObject<RatesAndReviews>(rates, page_size, current_page));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RatesAndReviews> createProject(@RequestBody RatesAndReviews rates) {
+    public ResponseEntity<RatesAndReviews> addReview(@RequestBody RatesAndReviews rates) {
         return ResponseEntity.ok(service.createOrUpdateRate(rates));
     }
 

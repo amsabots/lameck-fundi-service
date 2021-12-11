@@ -1,15 +1,17 @@
 package com.amsabots.jenzi.fundi_service.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
-@Table(name = "fund_rate_reviews")
+@Table(name = "fundi_rate_reviews")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -22,14 +24,24 @@ public class RatesAndReviews extends AbstractEntity {
     private String review;
     private boolean isApproved = true;
     private float rating;
+    private boolean hideSource = false;
+    @Column(updatable = false)
+    private String source;
+    @Column(updatable = false)
+    private String reviewId;
 
-    @JsonManagedReference
+
     @ManyToOne
-    @JoinColumn(name = "accountId", referencedColumnName = "id")
+    @JoinColumn(name = "accountId")
     private Account account;
 
-    @JsonManagedReference
+
     @ManyToOne
-    @JoinColumn(name = "projectId", referencedColumnName = "id")
+    @JoinColumn(name = "projectId")
     private Projects projects;
+
+    @PrePersist
+    public void setReviewDefaults() {
+        setReviewId(UUID.randomUUID().toString().replaceAll("-", ""));
+    }
 }

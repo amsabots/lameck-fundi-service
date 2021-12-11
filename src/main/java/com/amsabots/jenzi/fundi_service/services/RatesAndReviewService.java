@@ -31,4 +31,9 @@ public class RatesAndReviewService {
     public void deleteReview(long id) {
         repo.deleteById(id);
     }
+
+    public RatesAndReviews getReviewBySource(String source) {
+        return repo.getRatesAndReviewsBySource(source).orElseThrow(() ->
+                new CustomResourceNotFound("The review belonging to the given account Id does not exist"));
+    }
 }
