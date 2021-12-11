@@ -34,9 +34,9 @@ public class ReviewsController {
     public ResponseEntity<ResponseObject<RatesAndReviews>> getAllProjects(@RequestParam Optional<Integer> page, @RequestParam Optional<Integer> pageSize
             , @RequestParam Optional<Long> accountId) {
 
-         int current_page = page.orElse(0);
+        int current_page = page.orElse(0);
         int page_size = pageSize.orElse(20);
-        long id = accountId.orElseThrow(()->
+        long id = accountId.orElseThrow(() ->
                 new CustomBadRequest("Request parameter of type accountId is required to map th request to respective account id")
         );
         List<RatesAndReviews> rates = service.getAccountRates(id, PageRequest.of(current_page, page_size));
@@ -62,5 +62,27 @@ public class ReviewsController {
         return ResponseEntity.ok().body("{\"message\":\"The Review record has been removed successfully\"}");
     }
 
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/get")
+    public ResponseEntity<RatesAndReviews> getReviewByReviewId(@RequestParam Optional<String> id,
+                                                               @RequestParam Optional<String> getBy) {
+        String get_by = getBy.orElseThrow(() -> new CustomBadRequest(
+                "You have to explicitly specify the method to use to fetch using key \"getBy\"\n" +
+                        "============ Allowed Options ==========\n" +
+                        "1. source\n" +
+                        "2. reviewId"
+        ));
+        String review_id = id.orElseThrow(() ->
+                new CustomBadRequest("An existing review \"id\" Should in the request parameters - Must be a string" +
+                        "with more than 10 characters"));
+
+        if (get_by.equalsIgnoreCase("reviewId"))
+            return ResponseEntity.ok().body(service.getReviewByReviewId(review_id));
+        else if (get_by.equals("source"))
+            return ResponseEntity.ok().body(service.getReviewBySource(review_id));
+        else
+            throw new CustomBadRequest("Options must include either of the following:\n" +
+                    "1. source\n" +
+                    "2. reviewId");
+    }
 
 }

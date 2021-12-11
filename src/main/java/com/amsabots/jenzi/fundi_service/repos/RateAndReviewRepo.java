@@ -14,4 +14,6 @@ public interface RateAndReviewRepo extends JpaRepository<RatesAndReviews, Long> 
     public Page<RatesAndReviews> findAllByAccountId(@Param("id") long id, Pageable pageable);
 
     public Optional<RatesAndReviews> getRatesAndReviewsBySource(String source);
+
+    public Optional<RatesAndReviews> getRatesAndReviewsByReviewId(String reviewId);
 }

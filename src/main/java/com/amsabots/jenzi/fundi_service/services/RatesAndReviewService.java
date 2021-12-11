@@ -36,4 +36,8 @@ public class RatesAndReviewService {
         return repo.getRatesAndReviewsBySource(source).orElseThrow(() ->
                 new CustomResourceNotFound("The review belonging to the given account Id does not exist"));
     }
+    public RatesAndReviews getReviewByReviewId(String reviewId) {
+        return repo.getRatesAndReviewsByReviewId(reviewId).orElseThrow(() ->
+                new CustomResourceNotFound("The review with provided Id does not exist"));
+    }
 }
