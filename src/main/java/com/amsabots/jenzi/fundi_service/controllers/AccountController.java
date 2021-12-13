@@ -1,10 +1,12 @@
-package com.amsabots.jenzi.fundi_service.contollers;
+package com.amsabots.jenzi.fundi_service.controllers;
 
 import com.amsabots.jenzi.fundi_service.entities.Account;
+import com.amsabots.jenzi.fundi_service.entities.Fundi_Account_Overall_Perfomance;
 import com.amsabots.jenzi.fundi_service.enumUtils.AccountProviders;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomBadRequest;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomForbiddenResource;
 import com.amsabots.jenzi.fundi_service.services.AccountService;
+import com.amsabots.jenzi.fundi_service.services.OverallPerfomanceService;
 import com.amsabots.jenzi.fundi_service.utils.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +30,8 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private PasswordEncoder encoder;
+    @Autowired
+    private OverallPerfomanceService perfomanceService;
 
     /**
      * This request controller is only accessible by any user with system admin roles.
@@ -38,6 +42,7 @@ public class AccountController {
                                                                 @RequestParam Optional<Integer> pageSize) {
         int page_size = pageSize.orElse(10);
         int current_page = page.orElse(0);
+        // =====
         Pageable pageable = PageRequest.of(current_page, page_size);
         return ResponseEntity.ok(new ResponseObject<>(accountService.getAllFundis(pageable), page_size, current_page));
     }
@@ -55,21 +60,29 @@ public class AccountController {
             throw new CustomForbiddenResource("The email or phone number you have provided already exists in our database");
 
         if (account.getPassword() != null) account.setPassword(encoder.encode(account.getPassword()));
-        return ResponseEntity.status(HttpStatus.OK).body(accountService.createOrUpdateAccount(account));
+        Account new_account = accountService.createOrUpdateAccount(account);
+
+//        save account performance defaults parameters
+        Fundi_Account_Overall_Perfomance performance = new Fundi_Account_Overall_Perfomance();
+        performance.setAccount(new_account);
+
+        performance = perfomanceService.createOrUpdate(performance);
+        new_account.setOverallPerfomance(performance);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new_account);
     }
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> updateFundiAccount(@RequestBody Account account, @PathVariable String id) {
+    public ResponseEntity<String> updateFundiAccount(@RequestBody Account account, @PathVariable long id) {
         account.setId(Long.valueOf(id));
         Account a = accountService.getAccountById(id);
         account.setPassword(a.getPassword());
-
         accountService.createOrUpdateAccount(account);
-        return ResponseEntity.status(HttpStatus.OK).body("{\nmessage\n:\nThe fundi details have been updated successfully\n}");
+        return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"The fundi details have been updated successfully\"}");
     }
 
     @PutMapping(path = "/password/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> resetPassword(@RequestBody Account account, @PathVariable String id) {
+    public ResponseEntity<String> resetPassword(@RequestBody Account account, @PathVariable long id) {
         if (null == account.getPassword()) throw new CustomBadRequest("Password field is required");
         Account a = accountService.getAccountById(id);
         a.setPassword(encoder.encode(account.getPassword()));
@@ -84,7 +97,7 @@ public class AccountController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> getFundiById(String id) {
+    public ResponseEntity<Account> getFundiById(long id) {
         return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccountById(id));
     }
 

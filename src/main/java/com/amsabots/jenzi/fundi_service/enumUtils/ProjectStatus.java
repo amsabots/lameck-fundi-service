@@ -1,5 +1,5 @@
 package com.amsabots.jenzi.fundi_service.enumUtils;
 
 public enum ProjectStatus {
-    COMPLETE, PENDING, ONGOING
+    COMPLETE, PENDING_CONFIRMATION, ONGOING, DISPUTE_PENDING, DISPUTE_COMPLETE
 }

@@ -4,6 +4,7 @@ import com.amsabots.jenzi.fundi_service.enumUtils.ProjectStatus;
 import com.amsabots.jenzi.fundi_service.utils.Commons;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
@@ -19,7 +20,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @ToString
-
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Projects extends AbstractEntity {
 
     @Id
@@ -41,6 +44,10 @@ public class Projects extends AbstractEntity {
 
     @OneToMany(mappedBy = "projects", targetEntity = RatesAndReviews.class)
     private List<RatesAndReviews> ratesAndReviews;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "project")
+    private Payments payments;
 
     @PrePersist
     public void setCreationDefaults() {

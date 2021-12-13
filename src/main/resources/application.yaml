@@ -4,7 +4,7 @@ spring:
     log-startup-info: false
 
   profiles:
-    active: dev
+    active: ${ENV:test}
   application:
     name: fundi-service
 

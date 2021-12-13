@@ -2,10 +2,7 @@ package com.amsabots.jenzi.fundi_service.entities;
 
 import com.amsabots.jenzi.fundi_service.enumUtils.AccountProviders;
 import com.amsabots.jenzi.fundi_service.utils.Commons;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerator;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +19,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Account extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,12 +43,20 @@ public class Account extends AbstractEntity {
     private String accountId;
     private boolean isPremium = false;
     private String photoUrl;
+    private boolean setPresence = false;
 
+
+    @JsonIgnore
     @OneToMany(mappedBy = "account")
     private List<Projects> projects;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "account", targetEntity = RatesAndReviews.class)
     private List<RatesAndReviews> ratesAndReviews;
+
+
+    @OneToOne(mappedBy = "account", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Fundi_Account_Overall_Perfomance overallPerfomance;
 
     @PrePersist
     public void setUserDefaults() {

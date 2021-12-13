@@ -1,4 +1,4 @@
-package com.amsabots.jenzi.fundi_service.contollers;
+package com.amsabots.jenzi.fundi_service.controllers;
 
 import com.amsabots.jenzi.fundi_service.entities.Projects;
 import com.amsabots.jenzi.fundi_service.enumUtils.ProjectStatus;
@@ -6,6 +6,7 @@ import com.amsabots.jenzi.fundi_service.services.ProjectsService;
 import com.amsabots.jenzi.fundi_service.utils.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -60,5 +61,19 @@ public class ProjectController {
     public ResponseEntity<String> removeProject(@PathVariable long id) {
         service.deleteProject(id);
         return ResponseEntity.ok().body("{\"message\":\"The project has been deleted successfully from your records\"}");
+    }
+
+    //select projects by user id
+    @GetMapping(path = "/project-status/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseObject<Projects>> findAllProjectsByStatusAndUserId(@PathVariable long id,
+                                                                                     @RequestParam Optional<ProjectStatus> projectstatus,
+                                                                                     @RequestParam Optional<Integer> pageSize,
+                                                                                     @RequestParam Optional<Integer> page) {
+        ProjectStatus pr_status = projectstatus.orElse(ProjectStatus.COMPLETE);
+        int page_size = pageSize.orElse(10), pg = page.orElse(0);
+        Pageable pageable = PageRequest.of(pg, page_size);
+        List<Projects> projects = service.getProjectsByStatusAndUserId(pageable, pr_status, id);
+        return ResponseEntity.ok().body(new ResponseObject<>(projects, page_size, pg));
+
     }
 }

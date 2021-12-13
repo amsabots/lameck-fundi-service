@@ -1,9 +1,7 @@
-package com.amsabots.jenzi.fundi_service.contollers;
+package com.amsabots.jenzi.fundi_service.controllers;
 
-import com.amsabots.jenzi.fundi_service.entities.Projects;
 import com.amsabots.jenzi.fundi_service.entities.RatesAndReviews;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomBadRequest;
-import com.amsabots.jenzi.fundi_service.services.ProjectsService;
 import com.amsabots.jenzi.fundi_service.services.RatesAndReviewService;
 import com.amsabots.jenzi.fundi_service.utils.ResponseObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.netty.http.server.HttpServer;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Optional;
 

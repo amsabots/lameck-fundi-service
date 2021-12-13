@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: jenzi_app
+    url: jdbc:postgresql://localhost:5432/jenzi_app
+    password: jenziapp
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      dialect: org.hibernate.dialect.PostgreSQL81Dialect

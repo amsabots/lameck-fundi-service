@@ -31,14 +31,14 @@ public class AccountService {
         accountRepo.deleteById(id);
     }
 
-    public Account getAccountById(String id) {
-        if (id.length() < 6) return accountRepo.findById(Long.valueOf(id))
-                .orElseThrow(() -> new CustomResourceNotFound("Provided id does not correlate with any of our records"));
-        return accountRepo.findAccountByAccountId(id)
-                .orElseThrow(() -> new CustomResourceNotFound("Provided id does not correlate with any of our records"));
+    public Account getAccountById(long id) {
+        return accountRepo.findById(id)
+                .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist records"));
+//        return accountRepo.findAccountByAccountId(id)
+//                .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist in our records"));
     }
 
-    public Account getAccountByEmail(String email){
+    public Account getAccountByEmail(String email) {
         return accountRepo.findAccountByEmail(email).orElse(null);
     }
 }

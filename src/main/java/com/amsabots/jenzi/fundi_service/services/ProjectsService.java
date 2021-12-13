@@ -2,6 +2,7 @@ package com.amsabots.jenzi.fundi_service.services;
 
 
 import com.amsabots.jenzi.fundi_service.entities.Projects;
+import com.amsabots.jenzi.fundi_service.enumUtils.ProjectStatus;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomResourceNotFound;
 import com.amsabots.jenzi.fundi_service.repos.ProjectRepo;
 import lombok.AllArgsConstructor;
@@ -39,6 +40,10 @@ public class ProjectsService {
 
     public void deleteProject(long id) {
         projectRepo.deleteById(id);
+    }
+
+    public List<Projects> getProjectsByStatusAndUserId(Pageable pageable, ProjectStatus projectStatus, long id){
+     return projectRepo.findProjectsByProjectIdAndProjectStatus(id, projectStatus, pageable).getContent();
     }
 
 
