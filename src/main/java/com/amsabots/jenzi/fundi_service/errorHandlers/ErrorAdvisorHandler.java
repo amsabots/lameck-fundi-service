@@ -43,10 +43,10 @@ public class ErrorAdvisorHandler {
                 HttpStatus.UNPROCESSABLE_ENTITY.value(), "SQL_EXCEPTION"));
     }
 
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ErrorEntity> handleMissingParameters(Exception ex) {
-        return ResponseEntity.badRequest().body(new ErrorEntity(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), "BAD_REQUEST"));
-    }
+//    @ExceptionHandler(MissingServletRequestParameterException.class)
+//    public ResponseEntity<ErrorEntity> handleMissingParameters(Exception ex) {
+//        return ResponseEntity.badRequest().body(new ErrorEntity(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), "BAD_REQUEST"));
+//    }
 
     @ExceptionHandler(CustomForbiddenResource.class)
     public ResponseEntity<ErrorEntity> handleForbiddenResource(Exception ex) {

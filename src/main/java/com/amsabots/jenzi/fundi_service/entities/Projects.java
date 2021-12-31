@@ -38,10 +38,11 @@ public class Projects extends AbstractEntity {
     private String backgroundIdColor;
     private String foregroundIdColor;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accountId")
+    @ManyToOne
+    @JoinColumn(name = "account_id")
     private Account account;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "projects", targetEntity = RatesAndReviews.class)
     private List<RatesAndReviews> ratesAndReviews;
 

@@ -19,9 +19,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
 public class Account extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,26 +34,21 @@ public class Account extends AbstractEntity {
     private String secondaryEmail;
     private boolean isEnabled = true;
     private boolean isVerified = false;
+    private boolean newPassword;
 
     private String userBackgroundColor;
     private String userForeGroundColor;
     private String accountId;
     private boolean isPremium = false;
     private String photoUrl;
-    private boolean setPresence = false;
-
 
     @JsonIgnore
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<Projects> projects;
 
     @JsonIgnore
     @OneToMany(mappedBy = "account", targetEntity = RatesAndReviews.class)
     private List<RatesAndReviews> ratesAndReviews;
-
-
-    @OneToOne(mappedBy = "account", orphanRemoval = true, cascade = CascadeType.ALL)
-    private Fundi_Account_Overall_Perfomance overallPerfomance;
 
     @PrePersist
     public void setUserDefaults() {

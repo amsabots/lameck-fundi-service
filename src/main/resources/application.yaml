@@ -4,9 +4,11 @@ spring:
     log-startup-info: false
 
   profiles:
-    active: ${ENV:test}
+    active: ${EXEC_ENV:dev}
   application:
     name: fundi-service
+  webflux:
+    base-path: /fundi/api
 
 #
 eureka:
@@ -15,5 +17,3 @@ eureka:
 
 server:
   port: 27800
-  servlet:
-    context-path: /fundi/api

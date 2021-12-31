@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  fundi_app:
+    container_name: jenzi_fundi_service
+    build: .
+    ports:
+      - "27800:27800"
+    networks:
+      - jenzi_app
+    environment:
+      - DB_USERNAME=jenzi
+      - DB_PASSWORD=jenzi@2022
+      - DB_HOST=pg
+      - EXEC_ENV=prod
+      - DB_NAME=jenzi
+
+
+
+networks:
+  jenzi_app:
+    external: true

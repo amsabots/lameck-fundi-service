@@ -47,10 +47,17 @@ public class AccountController {
         return ResponseEntity.ok(new ResponseObject<>(accountService.getAllFundis(pageable), page_size, current_page));
     }
 
+    //admin
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/count")
+    public ResponseEntity<String> getRecordsCount(){
+        long count = accountService.getAvailableUsers();
+        return ResponseEntity.ok().body(String.format("{\"message\":%s}", count));
+    }
+
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/register")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
         if (account.getAccountId() != null && account.getAccountProviders() == null)
-            throw new CustomBadRequest(String.format("You are using an external account provider with email or phone, you must provider a provider type explicitly\n" +
+            throw new CustomBadRequest(String.format("You are using an external account providers \"accountProviders\" with email or phone, you must provide a provider type explicitly\n" +
                     "Options include %s and %s", AccountProviders.GOOGLE, AccountProviders.PHONENUMBER));
         if (account.getAccountId() == null && account.getPassword() == null)
             throw new CustomBadRequest("Creating account like this requires email and password provided as part of the request body");

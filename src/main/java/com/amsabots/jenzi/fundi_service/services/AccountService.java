@@ -41,4 +41,9 @@ public class AccountService {
     public Account getAccountByEmail(String email) {
         return accountRepo.findAccountByEmail(email).orElse(null);
     }
+
+    public long getAvailableUsers() {
+        return accountRepo.count();
+    }
+
 }
