@@ -34,13 +34,13 @@ public class RatesAndReviews extends AbstractEntity {
     private String reviewId;
 
 
-    @ManyToOne
-    @JoinColumn(name = "accountId")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn
     private Account account;
 
 
-    @ManyToOne
-    @JoinColumn(name = "projectId")
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn
     private Projects projects;
 
     @PrePersist

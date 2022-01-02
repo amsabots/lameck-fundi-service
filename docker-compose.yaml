@@ -3,10 +3,11 @@ services:
   fundi_app:
     container_name: jenzi_fundi_service
     build: .
+    restart: always
     ports:
       - "27800:27800"
     networks:
-      - jenzi_app
+      - pc-local
     environment:
       - DB_USERNAME=jenzi
       - DB_PASSWORD=jenzi@2022
@@ -17,5 +18,5 @@ services:
 
 
 networks:
-  jenzi_app:
+  pc-local:
     external: true

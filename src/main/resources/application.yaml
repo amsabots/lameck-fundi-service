@@ -4,7 +4,7 @@ spring:
     log-startup-info: false
 
   profiles:
-    active: ${EXEC_ENV:dev}
+    active: ${EXEC_ENV:prod}
   application:
     name: fundi-service
   webflux:

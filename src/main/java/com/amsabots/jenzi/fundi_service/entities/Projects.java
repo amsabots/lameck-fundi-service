@@ -39,7 +39,7 @@ public class Projects extends AbstractEntity {
     private String foregroundIdColor;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
+    @JoinColumn
     private Account account;
 
     @JsonIgnore

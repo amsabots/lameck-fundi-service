@@ -50,8 +50,12 @@ public class Account extends AbstractEntity {
     private List<Projects> projects;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "account", targetEntity = RatesAndReviews.class)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<RatesAndReviews> ratesAndReviews;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Fundi_Account_Overall_Perfomance accountOverallPerfomance;
 
     @PrePersist
     public void setUserDefaults() {

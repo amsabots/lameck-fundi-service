@@ -74,7 +74,7 @@ public class AccountController {
         performance.setAccount(new_account);
 
         performance = perfomanceService.createOrUpdate(performance);
-        new_account.setOverallPerfomance(performance);
+        //new_account.setOverallPerfomance(performance);
 
         return ResponseEntity.status(HttpStatus.OK).body(new_account);
     }
@@ -94,13 +94,13 @@ public class AccountController {
         Account a = accountService.getAccountById(id);
         a.setPassword(encoder.encode(account.getPassword()));
         accountService.createOrUpdateAccount(a);
-        return ResponseEntity.status(HttpStatus.OK).body("{\nmessage\n:\nPassword has been updated successfully\n}");
+        return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"Password has been updated successfully\"}");
     }
 
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> deleteUser(@PathVariable long id) {
         accountService.deleteAccount(id);
-        return ResponseEntity.status(HttpStatus.OK).body("{\nmessage\n:\nThe Fundi account has been deleted successfully from the system\n}");
+        return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"The Fundi account has been deleted successfully from the system\"}");
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
