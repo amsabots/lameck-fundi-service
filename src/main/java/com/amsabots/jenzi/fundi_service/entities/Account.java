@@ -37,7 +37,7 @@ public class Account extends AbstractEntity {
     private String secondaryEmail;
     private boolean isEnabled = true;
     private boolean isVerified = false;
-    private boolean newPassword;
+    private boolean newPassword = false;
 
     private String userBackgroundColor;
     private String userForeGroundColor;

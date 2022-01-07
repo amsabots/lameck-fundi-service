@@ -1,10 +1,10 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     database: postgresql
   datasource:
     driver-class-name: org.postgresql.Driver
     username: ${DB_USERNAME:jenzi}
     password: ${DB_PASSWORD:jenzi@2022}
-    url: jdbc:postgresql://${DB_HOST:localhost}/${DB_NAME:jenzi}
+    url: jdbc:postgresql://${DB_HOST:localhost:5433}/${DB_NAME:jenzi}
