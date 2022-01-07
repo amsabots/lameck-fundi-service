@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: jenzi_app
-    url: jdbc:postgresql://localhost:5432/jenzi_app
-    password: jenziapp
+    username: ${DB_USERNAME:jenzi_app}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/ ${DB_NAME:jenzi_app}
+    password: ${DB_PASSWORD:jenziapp}
 
   jpa:
     hibernate:
