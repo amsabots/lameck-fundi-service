@@ -11,9 +11,10 @@ services:
     environment:
       - DB_USERNAME=jenzi
       - DB_PASSWORD=jenzi@2022
-      - DB_HOST=pg
+      - DB_HOST=mysqli
       - EXEC_ENV=prod
       - DB_NAME=jenzi
+      - EUREKA_URI=http://eureka-server:8761/eureka
 
 
 

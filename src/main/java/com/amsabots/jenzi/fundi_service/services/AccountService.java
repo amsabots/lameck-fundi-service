@@ -34,8 +34,6 @@ public class AccountService {
     public Account getAccountById(long id) {
         return accountRepo.findById(id)
                 .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist records"));
-//        return accountRepo.findAccountByAccountId(id)
-//                .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist in our records"));
     }
 
     public Account getAccountByEmail(String email) {

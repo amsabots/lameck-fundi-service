@@ -5,9 +5,12 @@ import com.amsabots.jenzi.fundi_service.entities.Fundi_Account_Overall_Perfomanc
 import com.amsabots.jenzi.fundi_service.enumUtils.AccountProviders;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomBadRequest;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomForbiddenResource;
+import com.amsabots.jenzi.fundi_service.repos.AccountRepo;
 import com.amsabots.jenzi.fundi_service.services.AccountService;
 import com.amsabots.jenzi.fundi_service.services.OverallPerfomanceService;
 import com.amsabots.jenzi.fundi_service.utils.ResponseObject;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,13 +28,14 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/accounts")
+@Slf4j
+@AllArgsConstructor
 public class AccountController {
-    @Autowired
+
     private AccountService accountService;
-    @Autowired
     private PasswordEncoder encoder;
-    @Autowired
     private OverallPerfomanceService perfomanceService;
+    private AccountRepo repo;
 
     /**
      * This request controller is only accessible by any user with system admin roles.
@@ -49,7 +53,7 @@ public class AccountController {
 
     //admin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/count")
-    public ResponseEntity<String> getRecordsCount(){
+    public ResponseEntity<String> getRecordsCount() {
         long count = accountService.getAvailableUsers();
         return ResponseEntity.ok().body(String.format("{\"message\":%s}", count));
     }
@@ -73,7 +77,7 @@ public class AccountController {
         Fundi_Account_Overall_Perfomance performance = new Fundi_Account_Overall_Perfomance();
         performance.setAccount(new_account);
 
-        performance = perfomanceService.createOrUpdate(performance);
+        perfomanceService.createOrUpdate(performance);
         //new_account.setOverallPerfomance(performance);
 
         return ResponseEntity.status(HttpStatus.OK).body(new_account);
@@ -81,10 +85,10 @@ public class AccountController {
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateFundiAccount(@RequestBody Account account, @PathVariable long id) {
-        account.setId(Long.valueOf(id));
         Account a = accountService.getAccountById(id);
         account.setPassword(a.getPassword());
-        accountService.createOrUpdateAccount(account);
+        account.setId(id);
+        repo.save(account);
         return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"The fundi details have been updated successfully\"}");
     }
 
@@ -104,7 +108,7 @@ public class AccountController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> getFundiById(long id) {
+    public ResponseEntity<Account> getFundiById(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccountById(id));
     }
 

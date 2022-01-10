@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProjectRepo extends JpaRepository<Projects, Long> {
@@ -18,4 +19,6 @@ public interface ProjectRepo extends JpaRepository<Projects, Long> {
 
     @Query("select pr from Projects pr where pr.projectStatus = :projectStatus and pr.account.id =:id")
     public Page<Projects> findProjectsByProjectIdAndProjectStatus(@Param("id") long id, @Param("projectStatus") ProjectStatus projectStatus, Pageable pageable);
+
+    public Optional<List<Projects>> findAllByTaskId(String id);
 }

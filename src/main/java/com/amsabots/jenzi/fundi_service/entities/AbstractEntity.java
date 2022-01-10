@@ -7,8 +7,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PreUpdate;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -24,6 +26,7 @@ import java.util.Date;
 public class AbstractEntity implements Serializable {
 
     @CreatedDate
+    @Column(updatable = false)
     private Date createdAt;
     @LastModifiedDate
     private Date updatedAt;

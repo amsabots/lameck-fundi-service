@@ -2,24 +2,37 @@ package com.amsabots.jenzi.fundi_service.controllers;
 
 import com.amsabots.jenzi.fundi_service.entities.Projects;
 import com.amsabots.jenzi.fundi_service.enumUtils.ProjectStatus;
+import com.amsabots.jenzi.fundi_service.errorHandlers.CustomResourceNotFound;
+import com.amsabots.jenzi.fundi_service.repos.ProjectRepo;
 import com.amsabots.jenzi.fundi_service.services.ProjectsService;
 import com.amsabots.jenzi.fundi_service.utils.ResponseObject;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/projects")
+@Slf4j
+@AllArgsConstructor
 public class ProjectController {
 
-    @Autowired
+
     private ProjectsService service;
+    private WebClient webClient;
+    private ProjectRepo repo;
 
     /*
      * ============  ADMIN ACCESS ONLY =====================
@@ -75,5 +88,21 @@ public class ProjectController {
         List<Projects> projects = service.getProjectsByStatusAndUserId(pageable, pr_status, id);
         return ResponseEntity.ok().body(new ResponseObject<>(projects, page_size, pg));
 
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/details/{jobId}")
+    public ResponseEntity<Object> getProjectDetailsFromClient(@PathVariable long jobId) {
+        Flux<Object> tweetFlux = webClient
+                .get()
+                .uri("http://localhost:27900/client/api/jobs/" + jobId)
+                .retrieve()
+                .bodyToFlux(Object.class);
+        return ResponseEntity.ok().body(tweetFlux);
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/client/{id}")
+    public ResponseEntity<List<Projects>> findAllProjectsByTaskId(@PathVariable String id) {
+        return ResponseEntity.ok().body(repo.findAllByTaskId(id)
+                .orElseThrow(()->new CustomResourceNotFound("Record details not available at this moment.")));
     }
 }

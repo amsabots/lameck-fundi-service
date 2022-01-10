@@ -34,7 +34,7 @@ public class Fundi_Account_Overall_Perfomance extends AbstractEntity {
     private float stars = 0;
     private long client_rated = 0;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name = "accountId", foreignKey = @ForeignKey(name = "FK_ACCOUNT_ACCOUNT_PERFOMANCE"))
     private Account account;
     private int completedProjects = 0;
