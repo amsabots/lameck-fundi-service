@@ -2,9 +2,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    database: postgresql
+    database: mysql
+
   datasource:
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME:jenzi}
     password: ${DB_PASSWORD:jenzi@2022}
-    url: jdbc:postgresql://${DB_HOST:localhost:5433}/${DB_NAME:jenzi}
+    url: jdbc:mysql://${DB_HOST:localhost:3306}/${DB_NAME:jenzi}
+

@@ -2,21 +2,30 @@ package com.amsabots.jenzi.fundi_service.controllers;
 
 import com.amsabots.jenzi.fundi_service.entities.Account;
 import com.amsabots.jenzi.fundi_service.entities.Fundi_Account_Overall_Perfomance;
+import com.amsabots.jenzi.fundi_service.entities.RedisLocationAlgo;
 import com.amsabots.jenzi.fundi_service.enumUtils.AccountProviders;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomBadRequest;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomForbiddenResource;
+import com.amsabots.jenzi.fundi_service.repos.AccountRepo;
 import com.amsabots.jenzi.fundi_service.services.AccountService;
+import com.amsabots.jenzi.fundi_service.services.LocationGenerator;
 import com.amsabots.jenzi.fundi_service.services.OverallPerfomanceService;
+import com.amsabots.jenzi.fundi_service.utils.NearbyAccounts;
 import com.amsabots.jenzi.fundi_service.utils.ResponseObject;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.geo.Point;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -25,13 +34,15 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/accounts")
+@Slf4j
+@AllArgsConstructor
 public class AccountController {
-    @Autowired
+
     private AccountService accountService;
-    @Autowired
     private PasswordEncoder encoder;
-    @Autowired
     private OverallPerfomanceService perfomanceService;
+    private AccountRepo repo;
+    private LocationGenerator locationGenerator;
 
     /**
      * This request controller is only accessible by any user with system admin roles.
@@ -49,7 +60,7 @@ public class AccountController {
 
     //admin
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/count")
-    public ResponseEntity<String> getRecordsCount(){
+    public ResponseEntity<String> getRecordsCount() {
         long count = accountService.getAvailableUsers();
         return ResponseEntity.ok().body(String.format("{\"message\":%s}", count));
     }
@@ -73,7 +84,7 @@ public class AccountController {
         Fundi_Account_Overall_Perfomance performance = new Fundi_Account_Overall_Perfomance();
         performance.setAccount(new_account);
 
-        performance = perfomanceService.createOrUpdate(performance);
+        perfomanceService.createOrUpdate(performance);
         //new_account.setOverallPerfomance(performance);
 
         return ResponseEntity.status(HttpStatus.OK).body(new_account);
@@ -81,10 +92,10 @@ public class AccountController {
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateFundiAccount(@RequestBody Account account, @PathVariable long id) {
-        account.setId(Long.valueOf(id));
         Account a = accountService.getAccountById(id);
         account.setPassword(a.getPassword());
-        accountService.createOrUpdateAccount(account);
+        account.setId(id);
+        repo.save(account);
         return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"The fundi details have been updated successfully\"}");
     }
 
@@ -104,7 +115,7 @@ public class AccountController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> getFundiById(long id) {
+    public ResponseEntity<Account> getFundiById(@PathVariable long id) {
         return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccountById(id));
     }
 
@@ -116,6 +127,28 @@ public class AccountController {
         if (!encoder.matches(account.getPassword(), a.getPassword()))
             throw new CustomForbiddenResource("The password or email used is invalid");
         return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"Welcome to the our service. It is always good to see you\"}");
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/find-nearby")
+    public ResponseEntity<List<NearbyAccounts>> getNearbyUsers(
+            @RequestParam(required = true) double latitude,
+            @RequestParam(required = true) double longitude,
+            @RequestParam Optional<Double> scanRadius) {
+        List<NearbyAccounts> nearbyAccounts = new ArrayList<>();
+        double r = scanRadius.orElse(15.0);
+        List<RedisLocationAlgo> locations = locationGenerator.queryByProximityRadius(
+                new Point(longitude, latitude), r
+        );
+        locations.forEach(e -> {
+            Account a = repo.findAccountByAccountId(e.getAccountId()).orElse(null);
+            NearbyAccounts accounts = new NearbyAccounts();
+            if (a != null && !a.isEngaged()) {
+                accounts.setAccount(a);
+                accounts.setDistance(e.getDistance());
+                nearbyAccounts.add(accounts);
+            }
+        });
+        return ResponseEntity.ok(nearbyAccounts);
     }
 
 

@@ -14,8 +14,16 @@ spring:
 eureka:
   client:
     service-url:
+    serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
 
-
+app:
+  params:
+    redis:
+      port: ${REDIS_PORT:6380}
+      host: ${REDIS_HOST:localhost}
+    variables:
+      location_key: jenzi:locations
+      locator_delay: 10000
 server:
   port: 27800

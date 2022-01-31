@@ -4,6 +4,7 @@ import com.amsabots.jenzi.fundi_service.entities.Account;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomResourceNotFound;
 import com.amsabots.jenzi.fundi_service.repos.AccountRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class AccountService {
+    @Autowired
     private AccountRepo accountRepo;
 
     public List<Account> getAllFundis(Pageable pageable) {
@@ -34,8 +36,6 @@ public class AccountService {
     public Account getAccountById(long id) {
         return accountRepo.findById(id)
                 .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist records"));
-//        return accountRepo.findAccountByAccountId(id)
-//                .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist in our records"));
     }
 
     public Account getAccountByEmail(String email) {

@@ -8,6 +8,9 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.reactive.function.client.WebClientException;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import javax.persistence.RollbackException;
 
@@ -43,10 +46,10 @@ public class ErrorAdvisorHandler {
                 HttpStatus.UNPROCESSABLE_ENTITY.value(), "SQL_EXCEPTION"));
     }
 
-//    @ExceptionHandler(MissingServletRequestParameterException.class)
-//    public ResponseEntity<ErrorEntity> handleMissingParameters(Exception ex) {
-//        return ResponseEntity.badRequest().body(new ErrorEntity(ex.getMessage(), HttpStatus.BAD_REQUEST.value(), "BAD_REQUEST"));
-//    }
+    @ExceptionHandler({WebClientException.class, WebClientRequestException.class, WebClientResponseException.class})
+    public ResponseEntity<ErrorEntity> handleMissingParameters(Exception ex) {
+        return ResponseEntity.badRequest().body(new ErrorEntity(ex.getMessage(), HttpStatus.NOT_FOUND.value(), "NOT_FOUND"));
+    }
 
     @ExceptionHandler(CustomForbiddenResource.class)
     public ResponseEntity<ErrorEntity> handleForbiddenResource(Exception ex) {

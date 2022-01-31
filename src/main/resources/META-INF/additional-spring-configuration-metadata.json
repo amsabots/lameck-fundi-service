@@ -1,0 +1,23 @@
+{
+  "properties": [
+    {
+      "name": "app.params.redis.port",
+      "type": "java.lang.Long",
+      "description": "The port on which redis instance is listening for traffic on."
+    },
+    {
+      "name": "app.params.redis.host",
+      "type": "java.lang.String",
+      "description": "The redis host."
+    },
+    {
+      "name": "app.params.variables.location_key",
+      "type": "java.lang.String",
+      "description": "Description for app.params.variables.location_key."
+    },
+    {
+      "name": "app.params.variables.locator_delay",
+      "type": "java.lang.Long",
+      "description": "Description for app.params.variables.locator_delay."
+    }
+  ] }

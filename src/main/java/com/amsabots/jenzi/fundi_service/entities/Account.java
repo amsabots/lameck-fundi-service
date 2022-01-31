@@ -44,17 +44,20 @@ public class Account extends AbstractEntity {
     private String accountId;
     private boolean isPremium = false;
     private String photoUrl;
+    private boolean isEngaged = false;
+    private String longitude ;
+    private String latitude;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Projects> projects;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<RatesAndReviews> ratesAndReviews;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(mappedBy = "account", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private Fundi_Account_Overall_Perfomance accountOverallPerfomance;
 
     @PrePersist
