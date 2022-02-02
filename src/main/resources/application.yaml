@@ -9,6 +9,11 @@ spring:
     name: fundi-service
   webflux:
     base-path: /fundi/api
+  rabbitmq:
+    host: ${MQ_HOST:localhost}
+    port: ${MQ_PORT:5672}
+    username: ${MQ_USER:guest}
+    password: ${MQ_PASSWORD:guest}
 
 #
 eureka:
@@ -16,6 +21,8 @@ eureka:
     service-url:
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+
+
 
 app:
   params:
