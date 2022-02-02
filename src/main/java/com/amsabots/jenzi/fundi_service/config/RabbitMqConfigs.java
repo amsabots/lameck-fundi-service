@@ -1,6 +1,10 @@
 package com.amsabots.jenzi.fundi_service.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,27 +16,34 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMqConfigs {
     @Bean
     Queue messageQueue() {
-        return new Queue(ConfigConstants.OUT_GOING_MESSAGE_QUEUE);
+        return QueueBuilder.durable(ConfigConstants.OUT_GOING_MESSAGE_QUEUE).build();
     }
 
     @Bean
     Queue dlrQueue() {
-        return new Queue(ConfigConstants.DLR_MESSAGE_QUEUE);
+        return QueueBuilder.durable(ConfigConstants.DLR_MESSAGE_QUEUE).build();
     }
+
+    @Bean
+    Queue removeDLRQueue() {
+        return QueueBuilder.durable(ConfigConstants.REMOVE_DLR_QUEUE).build();
+    }
+
     @Bean
     Queue connectUsersQueue() {
-        return new Queue(ConfigConstants.CONNECT_USERS_QUEUE);
+        return QueueBuilder.durable(ConfigConstants.CONNECT_USERS_QUEUE).build();
     }
 
     @Bean
     DirectExchange directExchange() {
-        return new DirectExchange(ConfigConstants.MESSAGE_EXCHANGE);
+        return ExchangeBuilder.directExchange(ConfigConstants.MESSAGE_EXCHANGE).durable(true).build();
     }
 
     @Bean
     Binding messageQueueBinder() {
         return BindingBuilder.bind(messageQueue()).to(directExchange()).with(ConfigConstants.OUT_GOING_MESSAGE_KEY);
     }
+
     @Bean
     Binding connectUsersBinder() {
         return BindingBuilder.bind(connectUsersQueue()).to(directExchange()).with(ConfigConstants.CONNECT_USERS_KEY);
@@ -42,5 +53,21 @@ public class RabbitMqConfigs {
     Binding dlrQueueBinder() {
         return BindingBuilder.bind(dlrQueue()).to(directExchange()).with(ConfigConstants.DLR_MESSAGE_KEY);
     }
+
+    @Bean
+    Binding removeDLRQueueBinder() {
+        return BindingBuilder.bind(removeDLRQueue()).to(directExchange()).with(ConfigConstants.REMOVE_DLR_KEY);
+    }
+
+    @Bean
+    public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
+    public AmqpTemplate rabbitTemplate(RabbitTemplate rabbitTemplate) {
+        rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
+        return rabbitTemplate;
+    }
+
 
 }

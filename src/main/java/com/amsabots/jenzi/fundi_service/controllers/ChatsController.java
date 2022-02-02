@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +27,7 @@ import java.util.Optional;
 @RequestMapping("/chats")
 @AllArgsConstructor
 @Slf4j
-public class ChatsService {
+public class ChatsController {
     private ChatRepo repo;
     private RabbitTemplate rabbitTemplate;
     private ConnectedUsersRepo c_repo;
@@ -63,8 +62,24 @@ public class ChatsService {
         ConnectedUsers c = new ConnectedUsers();
         c.setDestinationId(chats.getDestinationId());
         c.setSourceId(chats.getSourceId());
-        rabbitTemplate.convertAndSend(ConfigConstants.CONNECT_USERS_KEY, c);
-        rabbitTemplate.convertAndSend(ConfigConstants.OUT_GOING_MESSAGE_KEY, c);
-        return ResponseEntity.ok(repo.save(chats));
+        rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.CONNECT_USERS_KEY, c);
+        Chats new_chat = repo.save(chats);
+        rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.OUT_GOING_MESSAGE_KEY, new_chat);
+        return ResponseEntity.ok(new_chat);
+    }
+
+    @PutMapping(path = "/dlr/{messageId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> updateDLrReport(@PathVariable String messageId) {
+        Chats chat = repo.findChatsByMessageId(messageId);
+        chat.setDelivered(true);
+        repo.save(chat);
+        rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.DLR_MESSAGE_KEY, chat);
+        return ResponseEntity.ok("{\"message\":\"DLR delivered\"}");
+    }
+
+    @GetMapping(path = "/dlr/{messageId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> deleteDLRReport(@PathVariable String messageId) {
+        rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.REMOVE_DLR_KEY, messageId);
+        return ResponseEntity.ok("done");
     }
 }

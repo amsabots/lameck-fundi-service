@@ -1,5 +1,6 @@
 package com.amsabots.jenzi.fundi_service.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,6 +35,7 @@ public class Chats extends AbstractEntity{
     private String destinationId;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "chats")
+    @JsonIgnore
     private List<ChatAttachments> chatAttachments;
 
     @PrePersist

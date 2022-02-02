@@ -8,5 +8,5 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: ${DB_USERNAME:jenzi}
     password: ${DB_PASSWORD:jenzi@2022}
-    url: jdbc:mysql://${DB_HOST:localhost:3306}/${DB_NAME:jenzi}
+    url: jdbc:mysql://${DB_HOST:localhost:3307}/${DB_NAME:jenzi}
 

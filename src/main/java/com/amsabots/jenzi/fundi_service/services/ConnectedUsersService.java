@@ -16,7 +16,7 @@ public class ConnectedUsersService {
     @Autowired
     private ConnectedUsersRepo repo;
 
-    @RabbitListener(queues = {ConfigConstants.CONNECT_USERS_QUEUE})
+    @RabbitListener(queues = ConfigConstants.CONNECT_USERS_QUEUE)
     private void createConnectionIfNotExists(ConnectedUsers connectedUsers) {
         ConnectedUsers c = repo.findConnectedUsersBySourceIdAndDestinationId(
                 connectedUsers.getSourceId(), connectedUsers.getDestinationId()
