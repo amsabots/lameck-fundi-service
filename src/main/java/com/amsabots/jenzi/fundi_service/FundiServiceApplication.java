@@ -5,6 +5,7 @@ import com.amsabots.jenzi.fundi_service.services.LocationGenerator;
 import com.amsabots.jenzi.fundi_service.utils.Commons;
 import com.netflix.discovery.converters.Auto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,7 @@ import java.util.UUID;
 @SpringBootApplication
 @Slf4j
 @EnableEurekaClient
+@EnableRabbit
 public class FundiServiceApplication {
 
     public static void main(String[] args) {
