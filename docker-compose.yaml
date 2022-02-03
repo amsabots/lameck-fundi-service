@@ -7,7 +7,7 @@ services:
     ports:
       - "27800:27800"
     networks:
-      - pc-local
+      - abc-local
     environment:
       - DB_USERNAME=jenzi
       - DB_PASSWORD=jenzi@2022
@@ -16,10 +16,11 @@ services:
       - DB_NAME=jenzi
       - EUREKA_URI=http://eureka-server:8761/eureka
       - REDIS_PORT=6379
-      - REDIS_HOST=
+      - REDIS_HOST=redis-server
+      - MQ_HOST=mq
 
 
 
 networks:
-  pc-local:
+  abc-local:
     external: true

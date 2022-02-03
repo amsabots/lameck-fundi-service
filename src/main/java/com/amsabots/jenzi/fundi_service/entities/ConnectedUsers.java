@@ -1,8 +1,6 @@
 package com.amsabots.jenzi.fundi_service.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,7 +10,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="connected_users")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConnectedUsers extends AbstractEntity{
