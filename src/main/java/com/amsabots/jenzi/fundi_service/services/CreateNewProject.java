@@ -27,7 +27,7 @@ public class CreateNewProject {
 
     @RabbitListener(queues = ConfigConstants.FUNDI_NEW_PROJECT_QUEUE)
     public void consumeIncomingProjects(String payload) throws JsonProcessingException {
-        IncomingPayload incomingPayload = mapper.readValue(payload, IncomingPayload.class);
-        log.info("[reason: incoming project details from client side] [info: {}]", incomingPayload.fundiId);
+
+        log.info("[reason: incoming project details from client side] [info: {}]", payload);
     }
 }
