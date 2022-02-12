@@ -34,8 +34,7 @@ public class CreateNewProject {
     }
 
     @RabbitListener(queues = ConfigConstants.FUNDI_NEW_PROJECT_QUEUE)
-    public void consumeIncomingProjects(Message payload) {
-        IncomingPayload p = (IncomingPayload) messageConverter.fromMessage(payload);
-        log.info("[reason: incoming project details from client side] [info: {}]", p.toString());
+    public void consumeIncomingProjects(String payload) {
+        log.info("[reason: incoming project details from client side] [info: {}]", payload);
     }
 }
