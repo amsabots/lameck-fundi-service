@@ -1,5 +1,6 @@
 package com.amsabots.jenzi.fundi_service.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
@@ -73,13 +74,11 @@ public class RabbitMqConfigs {
 
     @Bean
     public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
-        return new Jackson2JsonMessageConverter();
+        return new Jackson2JsonMessageConverter(objectMapper());
     }
-
     @Bean
-    public AmqpTemplate rabbitTemplate(RabbitTemplate rabbitTemplate) {
-        rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
-        return rabbitTemplate;
+    public ObjectMapper objectMapper(){
+        return new ObjectMapper();
     }
 
 
