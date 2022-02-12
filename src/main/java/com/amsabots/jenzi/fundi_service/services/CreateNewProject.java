@@ -13,6 +13,9 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.Serializable;
+
 @Configuration
 @Slf4j
 public class CreateNewProject {
@@ -21,13 +24,14 @@ public class CreateNewProject {
     @NoArgsConstructor
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public static class IncomingPayload{
+    public static class IncomingPayload implements Serializable {
         private String taskId;
         private String fundiId;
     }
 
     @RabbitListener(queues = ConfigConstants.FUNDI_NEW_PROJECT_QUEUE)
-    public void consumeIncomingProjects(Message payload) {
-        log.info("[reason: incoming project details from client side] [info: {}]", payload.toString());
+    public void consumeIncomingProjects(Message payload) throws IOException {
+        IncomingPayload p = mapper.readValue(payload.getBody(), IncomingPayload.class);
+        log.info("[reason: incoming project details from client side] [info: {}]", p.fundiId);
     }
 }
