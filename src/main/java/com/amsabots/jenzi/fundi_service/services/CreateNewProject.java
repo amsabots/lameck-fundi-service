@@ -1,6 +1,7 @@
 package com.amsabots.jenzi.fundi_service.services;
 
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class CreateNewProject {
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class IncomingPayload{
         private String taskId;
         private String fundiId;
