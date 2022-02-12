@@ -1,4 +1,4 @@
-package com.amsabots.jenzi.fundi_service;
+package com.amsabots.jenzi.fundi_service.services;
 
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
 import lombok.AllArgsConstructor;
@@ -6,9 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
-@Service
+@Configuration
 @Slf4j
 public class CreateNewProject {
     @AllArgsConstructor
