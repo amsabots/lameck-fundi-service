@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,7 @@ public class CreateNewProject {
     }
 
     @RabbitListener(queues = ConfigConstants.FUNDI_NEW_PROJECT_QUEUE)
-    public void consumeIncomingProjects(String payload) throws JsonProcessingException {
-
-        log.info("[reason: incoming project details from client side] [info: {}]", payload);
+    public void consumeIncomingProjects(Message payload) {
+        log.info("[reason: incoming project details from client side] [info: {}]", payload.toString());
     }
 }
