@@ -7,6 +7,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 /**
  * @author andrew mititi on Date 2/2/22
@@ -33,6 +34,11 @@ public class RabbitMqConfigs {
     Queue connectUsersQueue() {
         return QueueBuilder.durable(ConfigConstants.CONNECT_USERS_QUEUE).build();
     }
+    @Bean
+    public Queue fundiQueue() {
+        return QueueBuilder.durable(ConfigConstants.FUNDI_NEW_PROJECT_QUEUE).build();
+    }
+
 
     @Bean
     DirectExchange directExchange() {
@@ -54,9 +60,15 @@ public class RabbitMqConfigs {
         return BindingBuilder.bind(dlrQueue()).to(directExchange()).with(ConfigConstants.DLR_MESSAGE_KEY);
     }
 
+
+
     @Bean
     Binding removeDLRQueueBinder() {
         return BindingBuilder.bind(removeDLRQueue()).to(directExchange()).with(ConfigConstants.REMOVE_DLR_KEY);
+    }
+    @Bean
+    public Binding fundiProjectBinder() {
+        return BindingBuilder.bind(fundiQueue()).to(directExchange()).with(ConfigConstants.FUNDI_NEW_PROJECT_QUEUE_KEY);
     }
 
     @Bean
@@ -64,6 +76,7 @@ public class RabbitMqConfigs {
         return new Jackson2JsonMessageConverter();
     }
 
+    @Bean
     public AmqpTemplate rabbitTemplate(RabbitTemplate rabbitTemplate) {
         rabbitTemplate.setMessageConverter(producerJackson2MessageConverter());
         return rabbitTemplate;

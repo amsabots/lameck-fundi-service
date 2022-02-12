@@ -14,4 +14,6 @@ public interface ConfigConstants {
     public String CONNECT_USERS_KEY = "CONNECT_USERS_KEY";
     public String REMOVE_DLR_QUEUE = "REMOVE_DLR_QUEUE";
     public String REMOVE_DLR_KEY = "REMOVE_DLR_KEY";
+    String FUNDI_NEW_PROJECT_QUEUE = "FUNDI_NEW_PROJECT_QUEUE";
+    String FUNDI_NEW_PROJECT_QUEUE_KEY = "FUNDI_NEW_PROJECT_QUEUE_KEY";
 }
