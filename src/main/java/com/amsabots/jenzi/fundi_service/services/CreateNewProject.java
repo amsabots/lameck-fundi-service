@@ -22,7 +22,7 @@ import java.io.Serializable;
 @Slf4j
 public class CreateNewProject {
     @Autowired
-    private Jackson2JsonMessageConverter messageConverter;
+    private ObjectMapper objectMapper;
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
@@ -34,7 +34,8 @@ public class CreateNewProject {
     }
 
     @RabbitListener(queues = ConfigConstants.FUNDI_NEW_PROJECT_QUEUE)
-    public void consumeIncomingProjects(String payload) {
-        log.info("[reason: incoming project details from client side] [info: {}]", payload);
+    public void consumeIncomingProjects(String payload) throws JsonProcessingException {
+        IncomingPayload p = objectMapper.readValue(payload, IncomingPayload.class);
+        log.info("[reason: incoming project details from client side] [info: {}]", p.fundiId);
     }
 }
