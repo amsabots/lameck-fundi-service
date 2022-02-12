@@ -2,6 +2,7 @@ spring:
   main:
     banner-mode: off
     log-startup-info: false
+    allow-bean-definition-overriding: true
 
   profiles:
     active: ${EXEC_ENV:prod}
