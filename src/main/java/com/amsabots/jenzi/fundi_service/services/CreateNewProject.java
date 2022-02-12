@@ -1,6 +1,10 @@
 package com.amsabots.jenzi.fundi_service.services;
 
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
+import com.amsabots.jenzi.fundi_service.entities.Account;
+import com.amsabots.jenzi.fundi_service.entities.Projects;
+import com.amsabots.jenzi.fundi_service.repos.AccountRepo;
+import com.amsabots.jenzi.fundi_service.repos.ProjectRepo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,9 +24,12 @@ import java.io.Serializable;
 
 @Configuration
 @Slf4j
+@AllArgsConstructor
 public class CreateNewProject {
-    @Autowired
     private ObjectMapper objectMapper;
+    private AccountRepo accountRepo;
+    private ProjectRepo projectRepo;
+
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
@@ -36,6 +43,14 @@ public class CreateNewProject {
     @RabbitListener(queues = ConfigConstants.FUNDI_NEW_PROJECT_QUEUE)
     public void consumeIncomingProjects(String payload) throws JsonProcessingException {
         IncomingPayload p = objectMapper.readValue(payload, IncomingPayload.class);
-        log.info("[reason: incoming project details from client side] [info: {}]", p.fundiId);
+        Account a = accountRepo.findAccountByAccountId(p.fundiId).orElse(null);
+        if(null != a){
+            Projects projects = new Projects();
+            projects.setTaskId(p.getTaskId());
+            projects.setAccount(a);
+            Projects new_project = projectRepo.save(projects);
+            log.info("[new project has been created] [username: {}] [task id: {}] [project Id: {}]", a.getEmail(), p.getTaskId(), new_project.getProjectId());
+        }
+
     }
 }
