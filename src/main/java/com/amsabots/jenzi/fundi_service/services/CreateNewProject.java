@@ -49,6 +49,9 @@ public class CreateNewProject {
             projects.setTaskId(p.getTaskId());
             projects.setAccount(a);
             Projects new_project = projectRepo.save(projects);
+            //update current account status
+            a.setEngaged(true);
+            accountRepo.save(a);
             log.info("[new project has been created] [username: {}] [task id: {}] [project Id: {}]", a.getEmail(), p.getTaskId(), new_project.getProjectId());
         }
 
