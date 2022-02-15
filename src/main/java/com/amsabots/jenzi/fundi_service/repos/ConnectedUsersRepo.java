@@ -12,7 +12,5 @@ import java.util.List;
 public interface ConnectedUsersRepo extends JpaRepository<ConnectedUsers, Long> {
     public ConnectedUsers findConnectedUsersBySourceIdAndDestinationId(String sourceId,
                                                                        String destinationId);
-
     public List<ConnectedUsers> findAllBySourceId(String sourceId);
-    public List<ConnectedUsers> findAllBySourceIdOrDestinationId(String searchQuery);
 }
