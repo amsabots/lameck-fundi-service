@@ -22,6 +22,17 @@ public class ConnectedUsersService {
                 connectedUsers.getSourceId(), connectedUsers.getDestinationId()
         );
         if (null == c) repo.save(connectedUsers);
+        //insert for the other way round
+        ConnectedUsers c1 = repo.findConnectedUsersBySourceIdAndDestinationId(
+                connectedUsers.getDestinationId(), connectedUsers.getSourceId()
+        );
+        if(null == c1){
+            ConnectedUsers connectedUsers1 = new ConnectedUsers();
+            connectedUsers1.setSourceId(connectedUsers.getDestinationId());
+            connectedUsers1.setDestinationId(connectedUsers.getSourceId());
+            repo.save(connectedUsers1);
+        }
+
     }
 
 }
