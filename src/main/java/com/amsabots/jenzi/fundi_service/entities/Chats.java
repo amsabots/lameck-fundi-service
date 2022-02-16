@@ -33,6 +33,7 @@ public class Chats extends AbstractEntity{
     private boolean sent;
     private String sourceId;
     private String destinationId;
+    private String signature;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "chats")
     @JsonIgnore
@@ -42,6 +43,7 @@ public class Chats extends AbstractEntity{
     public void setDefaults(){
       setMessageId(UUID.randomUUID().toString().replaceAll("-", ""));
       setSent(true);
+      setSignature("source");
       setDelivered(false);
     }
 }

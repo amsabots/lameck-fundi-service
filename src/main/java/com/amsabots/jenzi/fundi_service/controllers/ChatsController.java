@@ -64,6 +64,11 @@ public class ChatsController {
         c.setSourceId(chats.getSourceId());
         rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.CONNECT_USERS_KEY, c);
         Chats new_chat = repo.save(chats);
+        // save the same to the destination id but change source id to destination id
+        chats.setSourceId(chats.getDestinationId());
+        chats.setDestinationId(chats.getSourceId());
+        chats.setSignature("destination");
+        repo.save(chats);
         rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.OUT_GOING_MESSAGE_KEY, new_chat);
         return ResponseEntity.ok(new_chat);
     }
