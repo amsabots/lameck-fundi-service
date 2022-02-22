@@ -120,13 +120,13 @@ public class AccountController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/login")
-    public ResponseEntity<String> login(@RequestBody Account account) {
+    public ResponseEntity<Account> login(@RequestBody Account account) {
         Account a = accountService.getAccountByEmail(account.getEmail());
         if (null == a)
             throw new CustomForbiddenResource("The email or phone number used does not exists in our records");
         if (!encoder.matches(account.getPassword(), a.getPassword()))
             throw new CustomForbiddenResource("The password or email used is invalid");
-        return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"Welcome to the our service. It is always good to see you\"}");
+        return ResponseEntity.status(HttpStatus.OK).body(a);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/find-nearby")
