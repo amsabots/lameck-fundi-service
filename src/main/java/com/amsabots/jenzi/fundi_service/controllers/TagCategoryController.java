@@ -34,9 +34,9 @@ public class TagCategoryController {
         return ResponseEntity.ok(categoryTags);
     }
 
-    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{entryId}")
-    public ResponseEntity<String> deleteEntryById(@PathVariable long entryId) {
-        repo.deleteById(entryId);
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{tagId}/{accountId}")
+    public ResponseEntity<String> deleteEntryById(@PathVariable long tagId, @PathVariable long accountId) {
+        repo.deleteByTagIdAAndAccountId(tagId, accountId);
         return ResponseEntity.ok("removed");
     }
 }

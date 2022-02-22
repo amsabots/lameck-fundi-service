@@ -11,4 +11,5 @@ public interface TagCategoryRepo extends JpaRepository<CategoryTags, Long> {
 
     CategoryTags findByAccountIdAndTagId(long accountId, long tagId);
     List<CategoryTags> findAllByAccountId(long id);
+    void deleteByTagIdAAndAccountId(long tagId, long accountId);
 }
