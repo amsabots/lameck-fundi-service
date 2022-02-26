@@ -20,7 +20,6 @@ import java.util.UUID;
 
 @SpringBootApplication
 @Slf4j
-@EnableEurekaClient
 @EnableRabbit
 public class FundiServiceApplication {
 
