@@ -17,12 +17,12 @@ import java.util.UUID;
  */
 
 @Entity
-@Table(name="chats")
+@Table(name = "chats")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Chats extends AbstractEntity{
+public class Chats extends AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -39,11 +39,14 @@ public class Chats extends AbstractEntity{
     @JsonIgnore
     private List<ChatAttachments> chatAttachments;
 
+    @ManyToOne
+    private ChatRooms chatRooms;
+
     @PrePersist
-    public void setDefaults(){
-      setMessageId(UUID.randomUUID().toString().replaceAll("-", ""));
-      setSent(true);
-      setSignature("source");
-      setDelivered(false);
+    public void setDefaults() {
+        setMessageId(UUID.randomUUID().toString().replaceAll("-", ""));
+        setSent(true);
+        setSignature("source");
+        setDelivered(false);
     }
 }

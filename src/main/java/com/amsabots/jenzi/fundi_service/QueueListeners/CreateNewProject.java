@@ -1,4 +1,4 @@
-package com.amsabots.jenzi.fundi_service.services;
+package com.amsabots.jenzi.fundi_service.QueueListeners;
 
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
 import com.amsabots.jenzi.fundi_service.entities.Account;

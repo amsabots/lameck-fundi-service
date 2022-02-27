@@ -2,9 +2,9 @@ package com.amsabots.jenzi.fundi_service.controllers;
 
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
 import com.amsabots.jenzi.fundi_service.entities.Chats;
-import com.amsabots.jenzi.fundi_service.entities.ConnectedUsers;
+import com.amsabots.jenzi.fundi_service.entities.ChatRooms;
 import com.amsabots.jenzi.fundi_service.repos.ChatRepo;
-import com.amsabots.jenzi.fundi_service.repos.ConnectedUsersRepo;
+import com.amsabots.jenzi.fundi_service.repos.ChatRoomsRepo;
 import com.amsabots.jenzi.fundi_service.utils.ChatsObjects;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ import java.util.Optional;
 public class ChatsController {
     private ChatRepo repo;
     private RabbitTemplate rabbitTemplate;
-    private ConnectedUsersRepo c_repo;
+    private ChatRoomsRepo c_repo;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ChatsObjects>> findFirstConversationMessages(
@@ -41,7 +41,7 @@ public class ChatsController {
 
         int l = limit.orElse(30);
         int pa = page.orElse(0);
-        List<ConnectedUsers> cu = c_repo.findAllBySourceId(sourceId);
+        List<ChatRooms> cu = c_repo.findAllBySourceId(sourceId);
         if (cu.size() > 0) {
             Pageable p = PageRequest.of(pa, l);
             cu.forEach(e -> {
@@ -59,7 +59,7 @@ public class ChatsController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Chats> createChat(@RequestBody Chats chats) {
-        ConnectedUsers c = new ConnectedUsers();
+        ChatRooms c = new ChatRooms();
         c.setDestinationId(chats.getDestinationId());
         c.setSourceId(chats.getSourceId());
         rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.CONNECT_USERS_KEY, c);

@@ -32,7 +32,7 @@ public class Projects extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private ProjectStatus projectStatus;
     private boolean isAccepted = true;
-
+    private String message;
     private String taskId;
 
     private String backgroundIdColor;
