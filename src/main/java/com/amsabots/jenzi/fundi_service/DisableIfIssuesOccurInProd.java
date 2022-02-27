@@ -6,6 +6,5 @@ import org.springframework.context.annotation.Profile;
 
 @Profile("dev")
 @Configuration
-@EnableEurekaClient
 public class DisableIfIssuesOccurInProd {
 }
