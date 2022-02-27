@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -14,5 +15,6 @@ public interface TagCategoryRepo extends JpaRepository<CategoryTags, Long> {
     CategoryTags findByAccountIdAndTagId(long accountId, long tagId);
     List<CategoryTags> findAllByAccountId(long id);
     @Modifying
+    @Transactional
     void deleteByTagIdAndAccountId(long tagId, long accountId);
 }
