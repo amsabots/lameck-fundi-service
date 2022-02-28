@@ -12,5 +12,5 @@ import java.util.List;
  */
 public interface ChatRoomsRepo extends JpaRepository<ChatRoomConnections, Long> {
     ChatRoomConnections getChatRoomConnectionsByPartyAAndPartyB(long partyA, long partyB);
-    ChatRoomConnections getChatRoomConnectionsByPartyA(long partyA);
+    List<ChatRoomConnections> findAllByPartyA(long partyA);
 }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 /**
  * @author andrew mititi on Date 2/28/22
@@ -54,8 +55,8 @@ public class ChatRoomController {
     }
 
     @GetMapping(path = "/{partyA}")
-    public ResponseEntity<ChatRoomConnections> getRoomByPartyA(@PathVariable long partyA) {
-        ChatRoomConnections connections = repo.getChatRoomConnectionsByPartyA(partyA);
+    public ResponseEntity<List<ChatRoomConnections>> getRoomByPartyA(@PathVariable long partyA) {
+        List<ChatRoomConnections> connections = repo.findAllByPartyA(partyA);
         return ResponseEntity.ok(connections);
     }
 
