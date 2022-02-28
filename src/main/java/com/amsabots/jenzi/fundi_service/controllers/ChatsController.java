@@ -71,7 +71,7 @@ public class ChatsController {
         return ResponseEntity.ok("done");
     }
 
-    @GetMapping("/lastItem/{partyA}")
+    @GetMapping(path="/lastItem/{partyA}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<LastChatItemObj>> getLastMessageForUserChatRooms(@PathVariable long partyA) {
         List<ChatRoomConnections> connections = roomsRepo.findAllByPartyA(partyA);
         List<LastChatItemObj> o = new ArrayList<>();
