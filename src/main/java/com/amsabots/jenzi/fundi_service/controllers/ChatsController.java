@@ -2,7 +2,6 @@ package com.amsabots.jenzi.fundi_service.controllers;
 
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
 import com.amsabots.jenzi.fundi_service.entities.Chats;
-import com.amsabots.jenzi.fundi_service.entities.ChatRooms;
 import com.amsabots.jenzi.fundi_service.repos.ChatRepo;
 import com.amsabots.jenzi.fundi_service.repos.ChatRoomsRepo;
 import com.amsabots.jenzi.fundi_service.utils.ChatsObjects;

@@ -29,24 +29,23 @@ public class Chats extends AbstractEntity {
     private String messageId;
     private String message;
     private Date date_sent;
-    private boolean delivered;
+    private boolean delivered = false;
     private boolean sent;
     private String sourceId;
     private String destinationId;
     private String signature;
+    private String tag;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "chats")
     @JsonIgnore
     private List<ChatAttachments> chatAttachments;
-
-    @ManyToOne
-    private ChatRooms chatRooms;
+    private String chatRoomId;
 
     @PrePersist
     public void setDefaults() {
         setMessageId(UUID.randomUUID().toString().replaceAll("-", ""));
         setSent(true);
-        setSignature("source");
-        setDelivered(false);
+        // tags can be either "message" "info" "danger" "success"
+        setTag("message");
     }
 }

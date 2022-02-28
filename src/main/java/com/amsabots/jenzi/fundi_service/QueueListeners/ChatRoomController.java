@@ -1,7 +1,6 @@
 package com.amsabots.jenzi.fundi_service.QueueListeners;
 
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
-import com.amsabots.jenzi.fundi_service.entities.ChatRooms;
 import com.amsabots.jenzi.fundi_service.repos.ChatRoomsRepo;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;

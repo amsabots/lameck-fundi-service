@@ -1,6 +1,5 @@
 package com.amsabots.jenzi.fundi_service.repos;
 
-import com.amsabots.jenzi.fundi_service.entities.ChatRooms;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

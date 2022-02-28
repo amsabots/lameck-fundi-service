@@ -55,4 +55,5 @@ public class ErrorAdvisorHandler {
     public ResponseEntity<ErrorEntity> handleForbiddenResource(Exception ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorEntity(ex.getMessage(), HttpStatus.FORBIDDEN.value(), "ERRBADREQUEST"));
     }
+
 }
