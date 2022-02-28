@@ -23,9 +23,11 @@ public class ChatRoomConnections extends AbstractEntity {
     private long partyB;
     private String chatRoomId;
     private boolean isDeleted = false;
-    
+
     @PrePersist
-    private void setDefaultsOnPersist(){
-        setChatRoomId(UUID.randomUUID().toString().replaceAll("-",""));
+    private void setDefaultsOnPersist() {
+        if (null == getChatRoomId()) {
+            setChatRoomId(UUID.randomUUID().toString().replaceAll("-", ""));
+        }
     }
 }
