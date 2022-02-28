@@ -20,7 +20,7 @@ public class ChatRoomController {
     private ChatRoomsRepo repo;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> createChatRoom(@RequestBody ChatRoomConnections connections) {
+    public ResponseEntity<ChatRoomConnections> createChatRoom(@RequestBody ChatRoomConnections connections) {
         ChatRoomConnections connection = null;
         connection = repo.getChatRoomConnectionsByPartyAAndPartyB(connections.getPartyA(), connections.getPartyB());
         if (null == connection) connection = repo.save(connections);
@@ -29,9 +29,9 @@ public class ChatRoomController {
             connections.setPartyA(connections.getPartyB());
             connections.setPartyB(connections.getPartyB());
             connections.setChatRoomId(connection.getChatRoomId());
-            repo.save(connections);
+            connection = repo.save(connections);
         }
-        return ResponseEntity.ok("New chat connection has been created");
+        return ResponseEntity.ok(connection);
     }
 
     @GetMapping(path = "/{partyA}/{partyB}", produces = MediaType.APPLICATION_JSON_VALUE)
