@@ -38,7 +38,7 @@ public class ChatRoomController {
     @GetMapping(path = "/{partyA}/{partyB}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ChatRoomConnections> getUserChatRoom(@PathVariable long partyA, @PathVariable long partyB) {
         ChatRoomConnections chr = repo.getChatRoomConnectionsByPartyAAndPartyB(partyA, partyB);
-        if (chr.isDeleted()) chr = null;
+        if (null != chr) if (chr.isDeleted()) chr = null;
         return ResponseEntity.ok(chr);
     }
 
