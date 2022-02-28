@@ -32,44 +32,27 @@ public class ChatsController {
     private ChatRoomsRepo c_repo;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ChatsObjects>> findFirstConversationMessages(
-            @RequestParam(required = true) String sourceId,
+    public ResponseEntity<ChatsObjects> findFirstConversationMessages(
+            @RequestParam(required = true) String chatRoomId,
             @RequestParam Optional<Integer> limit,
             @RequestParam Optional<Integer> page) {
-        List<ChatsObjects> objectsList = new ArrayList<>();
-
         int l = limit.orElse(30);
         int pa = page.orElse(0);
-        List<ChatRooms> cu = c_repo.findAllBySourceId(sourceId);
-        if (cu.size() > 0) {
-            Pageable p = PageRequest.of(pa, l);
-            cu.forEach(e -> {
-                List<Chats> c = repo
-                        .findAllBySourceIdAndDestinationId(sourceId, e.getDestinationId(), p)
-                        .getContent();
-                ChatsObjects chatsObjects = new ChatsObjects(e.getDestinationId(),
-                        c);
-                objectsList.add(chatsObjects);
-            });
-        }
-        return ResponseEntity.ok().body(objectsList);
+        Pageable pageable = PageRequest.of(pa, l);
+        List<Chats> chats = repo.findAllByChatRoomId(chatRoomId, pageable).toList();
+        return ResponseEntity.ok().body(new ChatsObjects(chats, pa, l));
 
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/{messageId}")
+    public ResponseEntity<Chats> getMessageById(@PathVariable String messageId) {
+        return ResponseEntity.ok(repo.findChatsByMessageId(messageId));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Chats> createChat(@RequestBody Chats chats) {
-        ChatRooms c = new ChatRooms();
-        c.setDestinationId(chats.getDestinationId());
-        c.setSourceId(chats.getSourceId());
-        rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.CONNECT_USERS_KEY, c);
-        Chats new_chat = repo.save(chats);
-        // save the same to the destination id but change source id to destination id
-        chats.setSourceId(chats.getDestinationId());
-        chats.setDestinationId(chats.getSourceId());
-        chats.setSignature("destination");
-        repo.save(chats);
-        rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.OUT_GOING_MESSAGE_KEY, new_chat);
-        return ResponseEntity.ok(new_chat);
+        Chats c = repo.save(chats);
+        return ResponseEntity.ok(c);
     }
 
     @PutMapping(path = "/dlr/{messageId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -77,7 +60,6 @@ public class ChatsController {
         Chats chat = repo.findChatsByMessageId(messageId);
         chat.setDelivered(true);
         repo.save(chat);
-        rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.DLR_MESSAGE_KEY, chat);
         return ResponseEntity.ok("{\"message\":\"DLR delivered\"}");
     }
 

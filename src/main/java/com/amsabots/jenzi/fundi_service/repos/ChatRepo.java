@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ChatRepo extends JpaRepository<Chats, Long> {
 
-    public Page<Chats> findAllBySourceIdAndDestinationId(String sourceId, String DestinationId, Pageable pageable);
+    Page<Chats> findAllByChatRoomId(String chatRoomId, Pageable pageable);
     public Chats findChatsByMessageId(String messageId);
 
 }

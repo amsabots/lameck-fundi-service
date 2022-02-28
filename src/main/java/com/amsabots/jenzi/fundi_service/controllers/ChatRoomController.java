@@ -21,7 +21,16 @@ public class ChatRoomController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createChatRoom(@RequestBody ChatRoomConnections connections) {
-        repo.save(connections);
+        ChatRoomConnections connection = null;
+        connection = repo.getChatRoomConnectionsByPartyAAndPartyB(connections.getPartyA(), connections.getPartyB());
+        if (null == connection) connection = repo.save(connections);
+        ChatRoomConnections partyB = repo.getChatRoomConnectionsByPartyAAndPartyB(connections.getPartyB(), connections.getPartyA());
+        if (null == partyB) {
+            connections.setPartyA(connections.getPartyB());
+            connections.setPartyB(connections.getPartyB());
+            connections.setChatRoomId(connection.getChatRoomId());
+            repo.save(connections);
+        }
         return ResponseEntity.ok("New chat connection has been created");
     }
 
@@ -39,12 +48,12 @@ public class ChatRoomController {
             mcon.setDeleted(true);
             repo.save(mcon);
         }
-        return ResponseEntity.ok("DOne deleting");
+        return ResponseEntity.ok("Done deleting");
 
     }
 
     @GetMapping(path = "/{partyA}")
-    public ResponseEntity<ChatRoomConnections> getRoomByPartyA(@PathVariable long partyA){
+    public ResponseEntity<ChatRoomConnections> getRoomByPartyA(@PathVariable long partyA) {
         ChatRoomConnections connections = repo.getChatRoomConnectionsByPartyA(partyA);
         return ResponseEntity.ok(connections);
     }

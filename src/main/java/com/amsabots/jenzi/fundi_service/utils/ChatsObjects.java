@@ -13,6 +13,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class ChatsObjects {
-    private String destinationId;
-    private List<Chats> chatsList;
+   private List<Chats> chats;
+   private int page;
+   private int page_size;
+
 }
