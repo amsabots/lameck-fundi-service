@@ -1,10 +1,12 @@
 package com.amsabots.jenzi.fundi_service.controllers;
 
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
+import com.amsabots.jenzi.fundi_service.entities.ChatRoomConnections;
 import com.amsabots.jenzi.fundi_service.entities.Chats;
 import com.amsabots.jenzi.fundi_service.repos.ChatRepo;
 import com.amsabots.jenzi.fundi_service.repos.ChatRoomsRepo;
 import com.amsabots.jenzi.fundi_service.utils.ChatsObjects;
+import com.amsabots.jenzi.fundi_service.utils.LastChatItemObj;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -29,7 +31,7 @@ import java.util.Optional;
 public class ChatsController {
     private ChatRepo repo;
     private RabbitTemplate rabbitTemplate;
-    private ChatRoomsRepo c_repo;
+    private ChatRoomsRepo roomsRepo;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ChatsObjects> findFirstConversationMessages(
@@ -67,5 +69,19 @@ public class ChatsController {
     public ResponseEntity<String> deleteDLRReport(@PathVariable String messageId) {
         rabbitTemplate.convertAndSend(ConfigConstants.MESSAGE_EXCHANGE, ConfigConstants.REMOVE_DLR_KEY, messageId);
         return ResponseEntity.ok("done");
+    }
+
+    @GetMapping("/lastItem/{partyA}")
+    public ResponseEntity<List<LastChatItemObj>> getLastMessageForUserChatRooms(@PathVariable long partyA) {
+        List<ChatRoomConnections> connections = roomsRepo.findAllByPartyA(partyA);
+        List<LastChatItemObj> o = new ArrayList<>();
+        connections.forEach(el -> {
+            LastChatItemObj lastChatItemObj = new LastChatItemObj();
+            Chats lastItem = repo.findTopByOrderOrderByChatRoomIdDesc(el.getChatRoomId());
+            lastChatItemObj.setLastMessage(lastItem);
+            lastChatItemObj.setConnection(el);
+            o.add(lastChatItemObj);
+        });
+        return ResponseEntity.ok(o);
     }
 }

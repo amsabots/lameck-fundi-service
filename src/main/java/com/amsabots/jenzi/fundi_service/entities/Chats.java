@@ -33,7 +33,6 @@ public class Chats extends AbstractEntity {
     private boolean sent;
     private String sourceId;
     private String destinationId;
-    private String signature;
     private String tag;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "chats")
