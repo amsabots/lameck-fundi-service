@@ -22,10 +22,6 @@ public class ChatRoomController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> createChatRoom(@RequestBody ChatRoomConnections connections) {
         repo.save(connections);
-        //swap the payload for party B insertion
-        connections.setPartyA(connections.getPartyB());
-        connections.setPartyB(connections.getPartyA());
-        repo.save(connections);
         return ResponseEntity.ok("New chat connection has been created");
     }
 
