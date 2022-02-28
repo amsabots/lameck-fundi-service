@@ -24,13 +24,13 @@ public class ChatRoomController {
         ChatRoomConnections connection = null;
         connection = repo.getChatRoomConnectionsByPartyAAndPartyB(connections.getPartyA(), connections.getPartyB());
         if (null == connection) connection = repo.save(connections);
-        ChatRoomConnections partyB = repo.getChatRoomConnectionsByPartyAAndPartyB(connections.getPartyB(), connections.getPartyA());
-        if (null == partyB) {
-            connections.setPartyA(connections.getPartyB());
-            connections.setPartyB(connections.getPartyB());
-            connections.setChatRoomId(connection.getChatRoomId());
-            connection = repo.save(connections);
-        }
+//        ChatRoomConnections partyB = repo.getChatRoomConnectionsByPartyAAndPartyB(connections.getPartyB(), connections.getPartyA());
+//        if (null == partyB) {
+//            connections.setPartyA(connections.getPartyB());
+//            connections.setPartyB(connections.getPartyB());
+//            connections.setChatRoomId(connection.getChatRoomId());
+//            connection = repo.save(connections);
+//        }
         return ResponseEntity.ok(connection);
     }
 
