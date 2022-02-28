@@ -16,7 +16,8 @@ public interface ChatRepo extends JpaRepository<Chats, Long> {
 
     Page<Chats> findAllByChatRoomId(String chatRoomId, Pageable pageable);
     public Chats findChatsByMessageId(String messageId);
-    @Query(nativeQuery = true, value = "SELECT c from Chats c where c.chatRoomId = ?1 order by c.id DESC Limit 1")
+    @Query("SELECT c from Chats c where c.chatRoomId = ?1  order by c.id DESC")
     Chats findTopByOrderByChatRoomIdDesc(String roomId);
+
 
 }
