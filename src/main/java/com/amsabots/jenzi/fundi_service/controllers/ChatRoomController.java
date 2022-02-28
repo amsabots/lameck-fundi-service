@@ -26,10 +26,11 @@ public class ChatRoomController {
         if (null == connection) connection = repo.save(connections);
         ChatRoomConnections partyB = repo.getChatRoomConnectionsByPartyAAndPartyB(connections.getPartyB(), connections.getPartyA());
         if (null == partyB) {
-            connections.setPartyA(connections.getPartyB());
-            connections.setPartyB(connections.getPartyA());
-            connections.setChatRoomId(connection.getChatRoomId());
-            connection = repo.save(connections);
+            ChatRoomConnections c = new ChatRoomConnections();
+            c.setPartyA(connections.getPartyB());
+            c.setPartyB(connection.getPartyA());
+            c.setChatRoomId(connection.getChatRoomId());
+            connection = repo.save(c);
         }
         return ResponseEntity.ok(connection);
     }
