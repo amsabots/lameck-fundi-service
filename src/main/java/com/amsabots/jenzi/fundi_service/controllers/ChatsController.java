@@ -77,7 +77,7 @@ public class ChatsController {
         List<LastChatItemObj> o = new ArrayList<>();
         connections.forEach(el -> {
             LastChatItemObj lastChatItemObj = new LastChatItemObj();
-            Chats lastItem = repo.findTopByOrderByChatRoomIdDesc(el.getChatRoomId()).setMaxResults(1).getResultList().get(0);
+            Chats lastItem = repo.findLastChatItemByChatRoomId(el.getChatRoomId()).setMaxResults(1).getResultList().get(0);
             lastChatItemObj.setLastMessage(lastItem);
             lastChatItemObj.setConnection(el);
             o.add(lastChatItemObj);
