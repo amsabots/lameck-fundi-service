@@ -1,12 +1,14 @@
 package com.amsabots.jenzi.fundi_service.controllers;
 
 import com.amsabots.jenzi.fundi_service.entities.Account;
+import com.amsabots.jenzi.fundi_service.entities.CategoryTags;
 import com.amsabots.jenzi.fundi_service.entities.Fundi_Account_Overall_Perfomance;
 import com.amsabots.jenzi.fundi_service.entities.RedisLocationAlgo;
 import com.amsabots.jenzi.fundi_service.enumUtils.AccountProviders;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomBadRequest;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomForbiddenResource;
 import com.amsabots.jenzi.fundi_service.repos.AccountRepo;
+import com.amsabots.jenzi.fundi_service.repos.TagCategoryRepo;
 import com.amsabots.jenzi.fundi_service.services.AccountService;
 import com.amsabots.jenzi.fundi_service.services.LocationGenerator;
 import com.amsabots.jenzi.fundi_service.services.OverallPerfomanceService;
@@ -43,6 +45,7 @@ public class AccountController {
     private OverallPerfomanceService perfomanceService;
     private AccountRepo repo;
     private LocationGenerator locationGenerator;
+    private TagCategoryRepo tagCategoryRepo;
 
     /**
      * This request controller is only accessible by any user with system admin roles.
@@ -141,10 +144,12 @@ public class AccountController {
         );
         locations.forEach(e -> {
             Account a = repo.findAccountByAccountId(e.getAccountId()).orElse(null);
+            List<CategoryTags> categoryTags = tagCategoryRepo.findAllByAccountId(a.getId());
             NearbyAccounts accounts = new NearbyAccounts();
             if (a != null && !a.isEngaged()) {
                 accounts.setAccount(a);
                 accounts.setDistance(e.getDistance());
+                accounts.setTags(categoryTags);
                 nearbyAccounts.add(accounts);
             }
         });
