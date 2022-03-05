@@ -144,14 +144,15 @@ public class AccountController {
         );
         locations.forEach(e -> {
             Account a = repo.findAccountByAccountId(e.getAccountId()).orElse(null);
-            List<CategoryTags> categoryTags = tagCategoryRepo.findAllByAccountId(a.getId());
-            NearbyAccounts accounts = new NearbyAccounts();
-            if (a != null && !a.isEngaged()) {
-                accounts.setAccount(a);
-                accounts.setDistance(e.getDistance());
-                accounts.setTags(categoryTags);
-                nearbyAccounts.add(accounts);
-            }
+            log.info("[From Redis: {}] [Actual account: {}]", e.toString(), a.toString());
+//            List<CategoryTags> categoryTags = tagCategoryRepo.findAllByAccountId(a.getId());
+//            NearbyAccounts accounts = new NearbyAccounts();
+//            if (a != null && !a.isEngaged()) {
+//                accounts.setAccount(a);
+//                accounts.setDistance(e.getDistance());
+//                accounts.setTags(categoryTags);
+//                nearbyAccounts.add(accounts);
+//            }
         });
         return ResponseEntity.ok(nearbyAccounts);
     }
