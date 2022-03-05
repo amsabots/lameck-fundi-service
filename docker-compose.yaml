@@ -16,7 +16,7 @@ services:
       - DB_NAME=jenzi
       - EUREKA_URI=http://eureka-server:8761/eureka
       - REDIS_PORT=6379
-      - REDIS_HOST=redis-server
+      - REDIS_HOST=localhost
       - MQ_HOST=mq
 
 
