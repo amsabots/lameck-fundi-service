@@ -16,8 +16,10 @@ services:
       - DB_NAME=jenzi
       - EUREKA_URI=http://eureka-server:8761/eureka
       - REDIS_PORT=6379
-      - REDIS_HOST=172.17.0.1
+      - REDIS_HOST=host.docker.internal
       - MQ_HOST=mq
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
 
 
