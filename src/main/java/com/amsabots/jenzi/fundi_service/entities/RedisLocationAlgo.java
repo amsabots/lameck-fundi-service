@@ -1,9 +1,6 @@
 package com.amsabots.jenzi.fundi_service.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 /**
  * @author andrew mititi on Date 1/31/22
@@ -13,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 public class RedisLocationAlgo {
     private String AccountId;
     private  double distance;
