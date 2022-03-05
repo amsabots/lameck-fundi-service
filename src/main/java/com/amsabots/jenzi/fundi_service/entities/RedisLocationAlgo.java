@@ -10,7 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@ToString
 public class RedisLocationAlgo {
     private String AccountId;
     private  double distance;
