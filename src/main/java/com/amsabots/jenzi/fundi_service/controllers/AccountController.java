@@ -143,8 +143,10 @@ public class AccountController {
                 new Point(longitude, latitude), r
         );
         locations.forEach(e -> {
+            log.info(e.toString());
             Account a = repo.findAccountByAccountId(e.getAccountId()).orElse(null);
-            log.info("[From Redis: {}] [Actual account: {}]", e.toString(), a.toString());
+            if (null != a) {
+                log.info("[From Redis: {}] [Actual account: {}]", e.toString(), a.toString());
 //            List<CategoryTags> categoryTags = tagCategoryRepo.findAllByAccountId(a.getId());
 //            NearbyAccounts accounts = new NearbyAccounts();
 //            if (a != null && !a.isEngaged()) {
@@ -153,6 +155,7 @@ public class AccountController {
 //                accounts.setTags(categoryTags);
 //                nearbyAccounts.add(accounts);
 //            }
+            }
         });
         return ResponseEntity.ok(nearbyAccounts);
     }
