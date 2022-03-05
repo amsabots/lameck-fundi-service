@@ -6,20 +6,16 @@ services:
     restart: always
     ports:
       - "27800:27800"
-    networks:
-      - pc-local
     environment:
       - DB_USERNAME=jenzi
       - DB_PASSWORD=jenzi@2022
       - DB_HOST=localhost
       - EXEC_ENV=prod
       - DB_NAME=jenzi
-      - EUREKA_URI=http://eureka-server:8761/eureka
+      - EUREKA_URI=http://localhost:8761/eureka
       - REDIS_PORT=6379
       - REDIS_HOST=localhost
       - MQ_HOST=localhost
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     network_mode: host
 
 
