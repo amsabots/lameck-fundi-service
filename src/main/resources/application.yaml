@@ -28,7 +28,7 @@ eureka:
 app:
   params:
     redis:
-      port: ${REDIS_PORT:6380}
+      port: ${REDIS_PORT:6379}
       host: ${REDIS_HOST:localhost}
     variables:
       location_key: jenzi:locations
