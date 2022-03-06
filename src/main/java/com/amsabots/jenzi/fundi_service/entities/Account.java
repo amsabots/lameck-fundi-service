@@ -49,6 +49,8 @@ public class Account extends AbstractEntity {
     private String latitude;
     private boolean isDeleted = false;
     private String NcaNumber;
+    private double stars = 0;
+    private long ratings = 0;
 
     @JsonIgnore
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
