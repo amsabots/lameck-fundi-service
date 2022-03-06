@@ -34,7 +34,7 @@ public class AccountService {
     }
 
     public Account getAccountById(String id) {
-        if(id.length() > 4)
+        if(id.length() < 4)
         return accountRepo.findById(Long.valueOf(id))
                 .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist records"));
         return accountRepo.findAccountByAccountId(id)
