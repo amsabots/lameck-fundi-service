@@ -33,8 +33,11 @@ public class AccountService {
         accountRepo.deleteById(id);
     }
 
-    public Account getAccountById(long id) {
-        return accountRepo.findById(id)
+    public Account getAccountById(String id) {
+        if(id.length() > 4)
+        return accountRepo.findById(Long.valueOf(id))
+                .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist records"));
+        return accountRepo.findAccountByAccountId(id)
                 .orElseThrow(() -> new CustomResourceNotFound("Provided account details do not exist records"));
     }
 

@@ -95,7 +95,7 @@ public class AccountController {
 
     @PutMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> updateFundiAccount(@RequestBody Account account, @PathVariable long id) {
-        Account a = accountService.getAccountById(id);
+        Account a = accountService.getAccountById(String.valueOf(id));
         account.setPassword(a.getPassword());
         account.setId(id);
         repo.save(account);
@@ -103,7 +103,7 @@ public class AccountController {
     }
 
     @PutMapping(path = "/password/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> resetPassword(@RequestBody Account account, @PathVariable long id) {
+    public ResponseEntity<String> resetPassword(@RequestBody Account account, @PathVariable String id) {
         if (null == account.getPassword()) throw new CustomBadRequest("Password field is required");
         Account a = accountService.getAccountById(id);
         a.setPassword(encoder.encode(account.getPassword()));
@@ -118,7 +118,7 @@ public class AccountController {
     }
 
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Account> getFundiById(@PathVariable long id) {
+    public ResponseEntity<Account> getFundiById(@PathVariable String id) {
         return ResponseEntity.status(HttpStatus.OK).body(accountService.getAccountById(id));
     }
 
