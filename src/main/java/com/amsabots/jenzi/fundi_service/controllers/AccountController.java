@@ -54,7 +54,7 @@ public class AccountController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseObject<Account>> getAllFundis(@RequestParam Optional<Integer> page,
                                                                 @RequestParam Optional<Integer> pageSize) {
-        int page_size = pageSize.orElse(10);
+        int page_size = pageSize.orElse(400);
         int current_page = page.orElse(0);
         // =====
         Pageable pageable = PageRequest.of(current_page, page_size);
