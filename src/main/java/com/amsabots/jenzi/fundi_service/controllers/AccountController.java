@@ -27,8 +27,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author andrew mititi on Date 12/2/21
@@ -136,21 +138,33 @@ public class AccountController {
     public ResponseEntity<List<NearbyAccounts>> getNearbyUsers(
             @RequestParam(required = true) double latitude,
             @RequestParam(required = true) double longitude,
-            @RequestParam Optional<Double> scanRadius) {
+            @RequestParam Optional<Double> scanRadius, @RequestParam Optional<Long> filter) {
         List<NearbyAccounts> nearbyAccounts = new ArrayList<>();
         double r = scanRadius.orElse(15.0);
         List<RedisLocationAlgo> locations = locationGenerator.queryByProximityRadius(
                 new Point(longitude, latitude), r
         );
+        // shuffle the collections
+        Collections.shuffle(locations);
+        // return the first 10 or 11
+        if (locations.size() > 11) {
+            locations = locations.subList(0, 10);
+        }
+        //loop through each
         locations.forEach(e -> {
             Account a = repo.findAccountByAccountId(e.getAccountId()).orElse(null);
             if (null != a) {
                 List<CategoryTags> categoryTags = tagCategoryRepo.findAllByAccountId(a.getId());
+                if (filter.isPresent()) {
+                    List<CategoryTags> c = categoryTags.stream().filter(element -> element.getTagId() == filter.get()).collect(Collectors.toList());
+                    if (c.isEmpty()) return;
+                }
                 NearbyAccounts accounts = new NearbyAccounts();
                 if (a != null && !a.isEngaged()) {
                     accounts.setAccount(a);
                     accounts.setDistance(e.getDistance());
                     accounts.setTags(categoryTags);
+
                     nearbyAccounts.add(accounts);
                 }
             }
