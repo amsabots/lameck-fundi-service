@@ -75,7 +75,7 @@ public class LocationGenerator {
         return locationAlgo;
     }
 
-    @Scheduled(fixedRate = 1000 * 60 * 60, initialDelay = 1000 * 20)
+    @Scheduled(fixedRate = 1000 * 15 * 60, initialDelay = 1000 * 20)
     public void populateRedisDatabaseAtIntervals() {
         log.info("Updating redis location content with new values..............");
         List<Account> accounts = repo.findAll()
