@@ -35,6 +35,7 @@ public class ProjectHandler {
 
     public void handleProjectCreation(String payload) throws JsonProcessingException {
         IncomingPayload p = objectMapper.readValue(payload, IncomingPayload.class);
+        log.info("++++++++ [message: trying to create a new project] [task ID: {}] [fundi Id: {}]", p.taskId, p.fundiId);
         Account a = accountRepo.findAccountByAccountId(p.fundiId).orElse(null);
         if (null != a) {
             Projects projects = new Projects();
