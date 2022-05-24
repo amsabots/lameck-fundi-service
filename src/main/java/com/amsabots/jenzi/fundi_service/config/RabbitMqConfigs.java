@@ -11,15 +11,11 @@ import org.springframework.context.annotation.Configuration;
  * @Project lameck-fundi-service
  */
 @Configuration
+
 public class RabbitMqConfigs {
     @Bean
     DirectExchange directExchange() {
         return ExchangeBuilder.directExchange(ConfigConstants.MESSAGE_EXCHANGE).durable(true).build();
-    }
-
-    @Bean
-    public Queue fundiQueue() {
-        return QueueBuilder.durable(ConfigConstants.FUNDI_NEW_PROJECT_QUEUE).build();
     }
 
     @Bean
@@ -28,12 +24,8 @@ public class RabbitMqConfigs {
     }
 
     @Bean
-    Binding fundiMessageQueueBinder() {
-        return BindingBuilder.bind(fundiQueue()).to(directExchange()).with(ConfigConstants.FUNDI_NEW_PROJECT_QUEUE_KEY);
-    }
-    @Bean
     Binding generalMessageQueueBinder() {
-        return BindingBuilder.bind(fundiQueue()).to(directExchange()).with(ConfigConstants.JENZI_GENERAL_QUEUE_KEY);
+        return BindingBuilder.bind(jenziGeneralQueue()).to(directExchange()).with(ConfigConstants.JENZI_GENERAL_QUEUE_KEY);
     }
     @Bean
     public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
