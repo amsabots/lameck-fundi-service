@@ -7,6 +7,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +21,10 @@ public class GeneralQueueListener {
     private ProjectHandler projectHandler;
 
     @AllArgsConstructor
+    @NoArgsConstructor
     @Data
     public static class PayloadOffload {
-        private String action;
+        private GeneralPayloadTypeMapper action;
         private String payload;
     }
 
@@ -30,7 +32,7 @@ public class GeneralQueueListener {
     public void consumeIncomingProjects(String payload) throws JsonProcessingException {
         PayloadOffload payloadOffload = objectMapper.readValue(payload, PayloadOffload.class);
         switch (payloadOffload.getAction()) {
-            case "NEW_PROJECT":
+            case NEW_PROJECT:
                 projectHandler.handleProjectCreation(payloadOffload.getPayload());
                 log.info("+++++++++++++ New project handler called ++++++++++++++++");
                 break;
