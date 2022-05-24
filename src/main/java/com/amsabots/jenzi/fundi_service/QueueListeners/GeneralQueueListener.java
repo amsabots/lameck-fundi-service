@@ -26,7 +26,7 @@ public class GeneralQueueListener {
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PayloadOffload {
-        private GeneralPayloadTypeMapper action;
+        private String action;
         private String payload;
     }
 
@@ -34,14 +34,14 @@ public class GeneralQueueListener {
     public void consumeIncomingProjects(String payload) throws JsonProcessingException {
         PayloadOffload payloadOffload = objectMapper.readValue(payload, PayloadOffload.class);
         log.warn(payloadOffload.getPayload());
-//        switch (payloadOffload.getAction()) {
-//            case NEW_PROJECT:
-//                projectHandler.handleProjectCreation(payloadOffload.getPayload());
-//                log.info("+++++++++++++ New project handler called ++++++++++++++++");
-//                break;
-//            default:
-//                log.info("[++++++++++ Data sent does not have any known handler provided ++++++++++++]");
-//                break;
-//        }
+        switch (payloadOffload.getAction()) {
+            case "NEW_PROJECT":
+                projectHandler.handleProjectCreation(payloadOffload.getPayload());
+                log.info("+++++++++++++ New project handler called ++++++++++++++++");
+                break;
+            default:
+                log.info("[++++++++++ Data sent does not have any known handler provided ++++++++++++]");
+                break;
+        }
     }
 }
