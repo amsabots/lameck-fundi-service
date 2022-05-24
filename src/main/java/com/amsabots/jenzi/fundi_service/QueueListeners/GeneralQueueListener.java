@@ -22,7 +22,7 @@ public class GeneralQueueListener {
     @AllArgsConstructor
     @Data
     public static class PayloadOffload {
-        private GeneralPayloadTypeMapper action;
+        private String action;
         private String payload;
     }
 
@@ -30,7 +30,7 @@ public class GeneralQueueListener {
     public void consumeIncomingProjects(String payload) throws JsonProcessingException {
         PayloadOffload payloadOffload = objectMapper.readValue(payload, PayloadOffload.class);
         switch (payloadOffload.getAction()) {
-            case NEW_PROJECT:
+            case "NEW_PROJECT":
                 projectHandler.handleProjectCreation(payloadOffload.getPayload());
                 log.info("+++++++++++++ New project handler called ++++++++++++++++");
                 break;
