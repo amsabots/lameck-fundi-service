@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Slf4j
 @AllArgsConstructor
-public class CreateNewProject {
+public class GeneralQueueListener {
     private ObjectMapper objectMapper;
     private ProjectHandler projectHandler;
 
@@ -26,7 +26,7 @@ public class CreateNewProject {
         private String payload;
     }
 
-    @RabbitListener(queues = ConfigConstants.JENZI_GENERAL_QUEUE_KEY)
+    @RabbitListener(queues = ConfigConstants.JENZI_GENERAL_QUEUE)
     public void consumeIncomingProjects(String payload) throws JsonProcessingException {
         PayloadOffload payloadOffload = objectMapper.readValue(payload, PayloadOffload.class);
         switch (payloadOffload.getAction()) {
