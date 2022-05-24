@@ -27,6 +27,10 @@ public class RabbitMqConfigs {
     Binding generalMessageQueueBinder() {
         return BindingBuilder.bind(jenziGeneralQueue()).to(directExchange()).with(ConfigConstants.JENZI_GENERAL_QUEUE_KEY);
     }
+    @Bean
+    public Jackson2JsonMessageConverter producerJackson2MessageConverter() {
+        return new Jackson2JsonMessageConverter(objectMapper());
+    }
 
     @Bean
     public ObjectMapper objectMapper() {
