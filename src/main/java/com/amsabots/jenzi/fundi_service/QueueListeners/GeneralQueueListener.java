@@ -31,8 +31,8 @@ public class GeneralQueueListener {
     }
 
     @RabbitListener(queues = ConfigConstants.JENZI_GENERAL_QUEUE)
-    public void consumeIncomingProjects(String payload) throws JsonProcessingException {
-        PayloadOffload payloadOffload = objectMapper.readValue(payload, PayloadOffload.class);
+    public void consumeIncomingProjects(Object payload) throws JsonProcessingException {
+        PayloadOffload payloadOffload = objectMapper.readValue((String)payload, PayloadOffload.class);
         switch (payloadOffload.getAction()) {
             case "NEW_PROJECT":
                 projectHandler.handleProjectCreation(payloadOffload.getPayload());
