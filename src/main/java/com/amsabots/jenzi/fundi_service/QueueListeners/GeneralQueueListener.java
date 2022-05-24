@@ -3,6 +3,7 @@ package com.amsabots.jenzi.fundi_service.QueueListeners;
 import com.amsabots.jenzi.fundi_service.config.ConfigConstants;
 import com.amsabots.jenzi.fundi_service.driver.ProjectHandler;
 import com.amsabots.jenzi.fundi_service.enumUtils.GeneralPayloadTypeMapper;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class GeneralQueueListener {
     @AllArgsConstructor
     @NoArgsConstructor
     @Data
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class PayloadOffload {
         private GeneralPayloadTypeMapper action;
         private String payload;
