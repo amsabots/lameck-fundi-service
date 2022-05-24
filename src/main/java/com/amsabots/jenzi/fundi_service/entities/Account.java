@@ -51,6 +51,7 @@ public class Account extends AbstractEntity {
     private String NcaNumber;
     private double stars = 0;
     private long ratings = 0;
+    private String notification_token;
 
     @JsonIgnore
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.PERSIST})

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-
 public class ProjectsService {
     @Autowired
     private ProjectRepo projectRepo;
@@ -45,6 +44,7 @@ public class ProjectsService {
     public List<Projects> getProjectsByStatusAndUserId(Pageable pageable, ProjectStatus projectStatus, long id){
      return projectRepo.findProjectsByProjectIdAndProjectStatus(id, projectStatus, pageable).getContent();
     }
+
 
 
 }
