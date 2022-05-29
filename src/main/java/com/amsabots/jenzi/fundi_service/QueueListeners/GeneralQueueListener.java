@@ -34,10 +34,6 @@ public class GeneralQueueListener {
     public void consumeIncomingProjects(String payload) throws JsonProcessingException {
         PayloadOffload payloadOffload = objectMapper.readValue(payload, PayloadOffload.class);
         switch (payloadOffload.getAction()) {
-            case "NEW_PROJECT":
-                projectHandler.handleProjectCreation(payloadOffload.getPayload());
-                log.info("+++++++++++++ New project handler called ++++++++++++++++");
-                break;
             default:
                 log.info("[++++++++++ Data sent does not have any known handler provided ++++++++++++]");
                 break;

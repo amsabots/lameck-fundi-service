@@ -1,5 +1,6 @@
 package com.amsabots.jenzi.fundi_service.controllers;
 
+import com.amsabots.jenzi.fundi_service.driver.ProjectHandler;
 import com.amsabots.jenzi.fundi_service.entities.Projects;
 import com.amsabots.jenzi.fundi_service.enumUtils.ProjectStatus;
 import com.amsabots.jenzi.fundi_service.errorHandlers.CustomResourceNotFound;
@@ -20,6 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import javax.print.attribute.standard.Media;
+import javax.ws.rs.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,7 @@ public class ProjectController {
     private ProjectsService service;
     private WebClient webClient;
     private ProjectRepo repo;
+    private ProjectHandler projectHandler;
 
     /*
      * ============  ADMIN ACCESS ONLY =====================
@@ -103,6 +106,12 @@ public class ProjectController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/client/{id}")
     public ResponseEntity<List<Projects>> findAllProjectsByTaskId(@PathVariable String id) {
         return ResponseEntity.ok().body(repo.findAllByTaskId(id)
-                .orElseThrow(()->new CustomResourceNotFound("Record details not available at this moment.")));
+                .orElseThrow(() -> new CustomResourceNotFound("Record details not available at this moment.")));
+    }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE, path = "/start/{fundiId}/{taskId}")
+    public ResponseEntity<String> createProject(@PathVariable String fundiId, @PathVariable String taskId) {
+        projectHandler.handleProjectCreation(taskId, fundiId);
+        return ResponseEntity.ok("\"message\":\"Project successfully created\"");
     }
 }
